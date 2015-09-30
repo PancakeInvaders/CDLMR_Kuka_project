@@ -21,7 +21,7 @@ public class MainController extends Application {
 
 	private Modele model;
 	//private StateListener vue;
-	private SvgMaison monSvg;
+	private SvgHandler monSvgHandler;
 	private NetworkClient client;
 
     @Override
@@ -32,7 +32,7 @@ public class MainController extends Application {
 
 		this.model=new Modele();
 		this.client=new NetworkClient();
-		this.monSvg=new SvgMaison();
+		this.monSvgHandler=new SvgHandler();
 
 
         initRootLayout();
@@ -122,9 +122,9 @@ public class MainController extends Application {
 
 	public void notifyEnvoyerSvgRobot(String cheminFichier)
 	{
-		System.out.println("inside notifyEnvoyerSvgRobot: " + cheminFichier);
+		System.out.println("entered notifyEnvoyerSvgRobot: " + cheminFichier);
 
-		this.monSvg.CreationSvgMaison(cheminFichier);
+		model.setSvgm( monSvgHandler.creationSvgMaison(cheminFichier) );
 
 		System.out.println("1");
 
@@ -132,7 +132,7 @@ public class MainController extends Application {
 
 		System.out.println("2");
 
-		this.client.envoyer();
+		this.client.envoyer(model.getSvgm());
 
 		System.out.println("3");
 
