@@ -31,9 +31,7 @@ public class BasicIHMController implements StateListener{
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open File");
         fileChooser.getExtensionFilters().addAll(
-                new ExtensionFilter("Text Files", "*.txt"),
-                new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-                new ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
+                new ExtensionFilter("SVG Files", "*.svg"),
                 new ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
