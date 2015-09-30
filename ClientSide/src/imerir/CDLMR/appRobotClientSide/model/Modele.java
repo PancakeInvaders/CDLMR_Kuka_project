@@ -1,11 +1,12 @@
 package imerir.CDLMR.appRobotClientSide.model;
 
+import java.util.ArrayList;
+
 import javax.swing.event.EventListenerList;
 
 import imerir.CDLMR.appRobotClientSide.view.StateChangedEvent;
 import imerir.CDLMR.appRobotClientSide.view.StateListener;
 import imerir.CDLMR.trajectoire.*;
-import imerir.CDLMR.trajectoire.Trajectoire.Type;
 
 public class Modele
 {
@@ -13,12 +14,14 @@ public class Modele
 
 	private Etat etat;
 
+	private SvgMaison svgm;
+
 	public Modele()
 	{
 		listeners = new EventListenerList();
 		this.etat=new Etat();
 
-		Trajectoire t = new Trajectoire( Type.LINE , _courbe)
+		svgm = new SvgMaison(new ArrayList<Trajectoire>());
 	}
 
 	public int getEtat()
@@ -56,6 +59,19 @@ public class Modele
 	public void addStateListener(StateListener stl){
 
 		listeners.add( StateListener.class, stl);
+	}
+
+	public void deleteStateListener(StateListener stl){
+
+		listeners.remove(StateListener.class, stl);
+	}
+
+	public void setSvgm(SvgMaison svgm) {
+		this.svgm = svgm;
+	}
+
+	public SvgMaison getSvgm() {
+		return svgm;
 	}
 
 }
