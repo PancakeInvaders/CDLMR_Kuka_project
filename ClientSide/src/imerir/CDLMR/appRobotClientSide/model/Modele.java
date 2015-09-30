@@ -5,6 +5,7 @@ import javax.swing.event.EventListenerList;
 import imerir.CDLMR.appRobotClientSide.view.StateChangedEvent;
 import imerir.CDLMR.appRobotClientSide.view.StateListener;
 import imerir.CDLMR.trajectoire.*;
+import imerir.CDLMR.trajectoire.Trajectoire.Type;
 
 public class Modele
 {
@@ -16,6 +17,8 @@ public class Modele
 	{
 		listeners = new EventListenerList();
 		this.etat=new Etat();
+
+		Trajectoire t = new Trajectoire( Type.LINE , _courbe)
 	}
 
 	public int getEtat()
