@@ -4,6 +4,7 @@ import javax.swing.event.EventListenerList;
 
 import imerir.CDLMR.appRobotClientSide.view.StateChangedEvent;
 import imerir.CDLMR.appRobotClientSide.view.StateListener;
+import imerir.CDLMR.trajectoire.*;
 
 public class Modele
 {
