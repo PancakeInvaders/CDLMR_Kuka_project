@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 /**
@@ -19,24 +19,24 @@ public class TcpClientSocket {
   public void run() {
 	try {
 		int serverPort = 30000;
-		//InetAddress host = InetAddress.getByName("localhost"); 
-		System.out.println("Connecting to server on port " + serverPort); 
+		//InetAddress host = InetAddress.getByName("localhost");
+		System.out.println("Connecting to server on port " + serverPort);
 
-		Socket socket = new Socket("172.30.1.176",serverPort); 
+		Socket socket = new Socket("172.30.1.120",serverPort);
 		//Socket socket = new Socket("127.0.0.1", serverPort);
-		System.out.println("Just connected to " + socket.getRemoteSocketAddress()); 
-		
-		
-		
+		System.out.println("Just connected to " + socket.getRemoteSocketAddress());
+
+
+
 		/************************/
         Vector2 p1 = new Vector2(158,81);
 		Vector2 p2 = new Vector2(137,88);
 		Vector2 p3 = new Vector2(128,102);
-		
+
 		ArrayList<Vector2> courbe = new ArrayList<Vector2>();
 		Trajectoire test = new Trajectoire(Type.SPLINE,courbe );
 		courbe.add(p1);courbe.add(p2);courbe.add(p3);
-		
+
 		Vector2 p9 = new Vector2(128,102);
 		Vector2 p4 = new Vector2(139,120);
 		Vector2 p5 = new Vector2(163,121);
@@ -48,27 +48,27 @@ public class TcpClientSocket {
 		ArrayList<Vector2> courbe2 = new ArrayList<Vector2>();
 		Trajectoire test2 = new Trajectoire(Type.SPLINE,courbe2 );
 		courbe2.add(p9);courbe2.add(p4);courbe2.add(p5);courbe2.add(p6);courbe2.add(p7);courbe2.add(p8);
-		
+
 		ArrayList<Trajectoire> al = new ArrayList<Trajectoire>();
-				
+
 		al.add(test);
 		al.add(test2);
 
 
-		
+
 		SvgMaison svgm = new SvgMaison(al);
-		
-		
+
+
 		/***********************/
-		
+
 		ObjectOutputStream oos =  new ObjectOutputStream(socket.getOutputStream()) ;
-		
+
 		 // création d'un objet à sérializer
 
 		 // sérialization de l'objet
 		oos.writeObject(svgm) ;
 
-		BufferedReader fromServer = 
+		BufferedReader fromServer =
 			new BufferedReader(
 					new InputStreamReader(socket.getInputStream()));
 		String line = fromServer.readLine();
@@ -84,7 +84,7 @@ public class TcpClientSocket {
 		e.printStackTrace();
 	}
   }
-	
+
   public static void main(String[] args) {
 		TcpClientSocket client = new TcpClientSocket();
 		client.run();

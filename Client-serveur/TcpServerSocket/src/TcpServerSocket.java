@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 /**
@@ -17,22 +17,23 @@ import imerir.CDLMR.trajectoire.Trajectoire.Type;
 public class TcpServerSocket {
 
 	public void run() {
+		ServerSocket serverSocket = null;
 		try {
 			int serverPort = 30000;
-			ServerSocket serverSocket = new ServerSocket(serverPort);
-			//serverSocket.setSoTimeout(10000); 
+			serverSocket = new ServerSocket(serverPort);
+			//serverSocket.setSoTimeout(10000);
 			while(true) {
-				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "..."); 
+				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 
 				Socket server = serverSocket.accept();
-				System.out.println("Just connected to " + server.getRemoteSocketAddress()); 
+				System.out.println("Just connected to " + server.getRemoteSocketAddress());
 
-				PrintWriter toClient = 
+				PrintWriter toClient =
 					new PrintWriter(server.getOutputStream(),true);
-				
+
 				 // ouverture d'un flux sur un fichier
 				ObjectInputStream ois =  new ObjectInputStream(server.getInputStream()) ;
-						
+
 				 // désérialization de l'objet
 				SvgMaison m;
 				try {
@@ -42,8 +43,8 @@ public class TcpServerSocket {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				toClient.println("Thx nigga !"); 
+
+				toClient.println("Thx nigga !");
 			}
 		}
 		catch(UnknownHostException ex) {
@@ -52,12 +53,22 @@ public class TcpServerSocket {
 		catch(IOException e){
 			e.printStackTrace();
 		}
+		finally{
+			if(serverSocket != null){
+				try {
+					serverSocket.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
-	
+
 	public static void main(String[] args) {
 		TcpServerSocket monServeur = new TcpServerSocket();
-		monServeur.run();	
+		monServeur.run();
 	}
-	
+
 
 }
