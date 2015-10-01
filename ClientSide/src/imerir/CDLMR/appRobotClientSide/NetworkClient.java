@@ -13,6 +13,16 @@ import java.io.*;
 
 public class NetworkClient
 {
+	private MainController mainController = null;
+
+	public NetworkClient(MainController mc) {
+		// TODO Auto-generated constructor stub
+
+		mainController = mc;
+
+	}
+
+
   public void envoyer(SvgMaison svg)
   {
 	try {
@@ -109,10 +119,21 @@ public class NetworkClient
 
 	}
 	catch(UnknownHostException ex) {
-		ex.printStackTrace();
+		mainController.notifyHandleException(
+				ex,
+				"Error",
+				"UnknownHostException occured",
+				"Some problem caused an UnknownHostException",
+				false);
+		//ex.printStackTrace();
 	}
 	catch(IOException e){
-		e.printStackTrace();
+		mainController.notifyHandleException(
+				e,
+				"Error",
+				"IOException occured",
+				"Some problem caused an IOException",
+				false);
 	}
   }
 }

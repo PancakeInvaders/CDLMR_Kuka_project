@@ -41,7 +41,7 @@ public class MainController extends Application {
         this.ihmModel = new IhmModel();
 
 		this.model=new Modele();
-		this.client=new NetworkClient();
+		this.client=new NetworkClient(this);
 		this.monSvgHandler=new SvgHandler();
 
 
@@ -178,7 +178,7 @@ public class MainController extends Application {
 
 	}
 
-	void notifyHandleException(Exception e, String title, String headerText, String contentText, boolean exit){
+	public void notifyHandleException(Exception e, String title, String headerText, String contentText, boolean exit){
 
 					Alert alert = new Alert(AlertType.ERROR);
 
