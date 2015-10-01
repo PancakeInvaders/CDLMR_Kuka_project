@@ -23,6 +23,8 @@ public class NetworkClient
 		ObjectOutputStream objectOut = new ObjectOutputStream ( socket.getOutputStream() );
 
 		objectOut.writeObject(svg);
+		System.out.println("succesfully sent object");
+
 
 		//PrintWriter toServer =
 		//	new PrintWriter(socket.getOutputStream(),true);
@@ -37,6 +39,9 @@ public class NetworkClient
 
 		objectOut.close();
 		socket.close();
+		System.out.println("streams closed: leaving envoyer");
+
+
 	}
 	catch(UnknownHostException ex) {
 		ex.printStackTrace();
