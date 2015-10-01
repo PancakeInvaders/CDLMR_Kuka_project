@@ -110,7 +110,7 @@ public class SvgHandler
          }
          else if(courant.getName().equals("circle"))
          {
-          	System.out.println("circle not implemented yet");
+          	System.out.println("found a circle");
 
           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
 
@@ -134,7 +134,7 @@ public class SvgHandler
          }
          else if(courant.getName().equals("ellipse"))
          {
-         	System.out.println("ellipse not implemented yet");
+        	 System.out.println("found an ellipse");
 
          	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
 
@@ -159,7 +159,7 @@ public class SvgHandler
          }
          else if(courant.getName().equals("line"))
          {
-          	System.out.println("line not implemented yet");
+        	System.out.println("found a line");
 
           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
 
@@ -172,21 +172,54 @@ public class SvgHandler
          	arrayTemp.add(new Vector2(_x2,_y2));
 
          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
-         	
-        	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
          }
          else if(courant.getName().equals("polyline"))
          {
-          	System.out.println("polyline not implemented yet");
+        	System.out.println("found polyline");
 
-        	//TODO
+          	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
+          	
+          	String _points = courant.getAttributeValue("points");
+          	String[] tabLocal = _points.split(" ");
+          	String[] tabLocalTemp;
+          	
+          	int cpt=0;
+          	
+          	while(cpt<tabLocal.length)
+          	{
+          		tabLocalTemp=tabLocal[cpt].split(",");
+          		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,Integer.parseInt(tabLocalTemp[1])));
+          	}
+          	
+
+          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+         	
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
          }
          else if(courant.getName().equals("polygon"))
          {
-          	System.out.println("polygon not implemented yet");
+          	System.out.println("found polygon");
+          	
+          	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
+          	
+          	String _points = courant.getAttributeValue("points");
+          	String[] tabLocal = _points.split(" ");
+          	String[] tabLocalTemp;
+          	
+          	int cpt=0;
+          	
+          	while(cpt<tabLocal.length)
+          	{
+          		tabLocalTemp=tabLocal[cpt].split(",");
+          		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,Integer.parseInt(tabLocalTemp[1])));
+          	}
+          	
+          	tabLocalTemp=tabLocal[0].split(",");
+      		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,Integer.parseInt(tabLocalTemp[1])));
+          	
 
-        	//TODO
+          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
          }
          else if(courant.getName().equals("path"))
