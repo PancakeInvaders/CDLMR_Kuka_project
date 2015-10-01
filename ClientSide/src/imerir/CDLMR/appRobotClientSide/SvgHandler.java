@@ -103,21 +103,67 @@ public class SvgHandler
          {
           	System.out.println("circle not implemented yet");
 
-        	//TODO
-        	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
+          	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
+
+        	int _cx = Integer.parseInt(courant.getAttributeValue("cx"));
+            int _cy = Integer.parseInt(courant.getAttributeValue("cy"));
+            int _r = Integer.parseInt(courant.getAttributeValue("r"));
+
+         	arrayTemp.add(new Vector2(_cx-_r ,_cy));
+         	arrayTemp.add(new Vector2(_cx,_cy+_r));
+         	arrayTemp.add(new Vector2(_cx+_r ,_cy));
+
+         	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
+         	
+         	arrayTemp = new ArrayList<Vector2>();
+
+         	arrayTemp.add(new Vector2(_cx+_r ,_cy));
+         	arrayTemp.add(new Vector2(_cx,_cy-_r));
+         	arrayTemp.add(new Vector2(_cx-_r ,_cy));
+
+         	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
          }
          else if(courant.getName().equals("ellipse"))
          {
          	System.out.println("ellipse not implemented yet");
 
-        	 //TODO
-        	 //ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
+         	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
+
+        	int _cx = Integer.parseInt(courant.getAttributeValue("cx"));
+            int _cy = Integer.parseInt(courant.getAttributeValue("cy"));
+            int _rx = Integer.parseInt(courant.getAttributeValue("rx"));
+            int _ry = Integer.parseInt(courant.getAttributeValue("ry"));
+
+         	arrayTemp.add(new Vector2(_cx-_rx ,_cy));
+         	arrayTemp.add(new Vector2(_cx,_cy+_ry));
+         	arrayTemp.add(new Vector2(_cx+_rx ,_cy));
+
+         	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
+         	
+         	arrayTemp = new ArrayList<Vector2>();
+
+         	arrayTemp.add(new Vector2(_cx+_rx ,_cy));
+         	arrayTemp.add(new Vector2(_cx,_cy-_ry));
+         	arrayTemp.add(new Vector2(_cx-_rx ,_cy));
+
+         	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
          }
          else if(courant.getName().equals("line"))
          {
           	System.out.println("line not implemented yet");
 
-        	//TODO
+          	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
+
+        	int _x1 = Integer.parseInt(courant.getAttributeValue("x1"));
+            int _y1 = Integer.parseInt(courant.getAttributeValue("y1"));
+            int _x2 = Integer.parseInt(courant.getAttributeValue("x2"));
+            int _y2 = Integer.parseInt(courant.getAttributeValue("y2"));
+
+         	arrayTemp.add(new Vector2(_x1 ,_y1));
+         	arrayTemp.add(new Vector2(_x2,_y2));
+
+         	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+         	
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
          }
          else if(courant.getName().equals("polyline"))
