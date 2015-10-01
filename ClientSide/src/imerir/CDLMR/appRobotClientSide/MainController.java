@@ -2,6 +2,10 @@ package imerir.CDLMR.appRobotClientSide;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import org.jdom2.JDOMException;
 
 import imerir.CDLMR.appRobotClientSide.model.IhmModel;
 import imerir.CDLMR.appRobotClientSide.model.Modele;
@@ -9,8 +13,14 @@ import imerir.CDLMR.appRobotClientSide.view.BasicIHMController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 public class MainController extends Application {
@@ -114,7 +124,10 @@ public class MainController extends Application {
 
     		System.out.println("impression filePath: " + file.getAbsolutePath());
 
-    		notifyEnvoyerSvgRobot(file.getAbsolutePath());
+
+			notifyEnvoyerSvgRobot(file.getAbsolutePath());
+
+
 
     	}
 
@@ -123,22 +136,91 @@ public class MainController extends Application {
 	public void notifyEnvoyerSvgRobot(String cheminFichier)
 	{
 		System.out.println("entered notifyEnvoyerSvgRobot: " + cheminFichier);
+		try {
+			model.setSvgm( monSvgHandler.createSvgMaison(cheminFichier) );
 
-		model.setSvgm( monSvgHandler.creationSvgMaison(cheminFichier) );
+			System.out.println("1");
 
-		System.out.println("1");
+			this.model.setEtat(1);
 
-		this.model.setEtat(1);
+			System.out.println("2");
 
-		System.out.println("2");
+			this.client.envoyer(model.getSvgm());
 
-		this.client.envoyer(model.getSvgm());
+			System.out.println("3");
 
-		System.out.println("3");
+			this.model.setEtat(0);
 
-		this.model.setEtat(0);
+			System.out.println("4");
+		}
+		catch (JDOMException e) {
 
-		System.out.println("4");
+			notifyHandleException(
+					e,
+					"Error",
+					"A JDOMException has been encountered during createSvgMaison",
+					"Some error occured while trying to comprehend the file",
+					false);
+
+			return;
+		}
+		catch (IOException e) {
+
+			notifyHandleException(
+					e,
+					"Error",
+					"An IOException has been encountered during createSvgMaison",
+					"Some error occured while trying to read the file",
+					false);
+
+			return;
+		}
+
+	}
+
+	void notifyHandleException(Exception e, String title, String headerText, String contentText, boolean exit){
+
+					Alert alert = new Alert(AlertType.ERROR);
+
+					System.out.println(headerText);
+					System.out.println(contentText);
+					e.printStackTrace();
+
+					alert.setTitle(title);
+					alert.setHeaderText(headerText);
+					alert.setContentText(contentText);
+
+					// Create expandable Exception.
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					e.printStackTrace(pw);
+					String exceptionText = sw.toString();
+
+					Label label = new Label("The exception stacktrace was:");
+
+					TextArea textArea = new TextArea(exceptionText);
+					textArea.setEditable(false);
+					textArea.setWrapText(true);
+
+					textArea.setMaxWidth(Double.MAX_VALUE);
+					textArea.setMaxHeight(Double.MAX_VALUE);
+					GridPane.setVgrow(textArea, Priority.ALWAYS);
+					GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+					GridPane expContent = new GridPane();
+					expContent.setMaxWidth(Double.MAX_VALUE);
+					expContent.add(label, 0, 0);
+					expContent.add(textArea, 0, 1);
+
+					// Set expandable Exception into the dialog pane.
+					alert.getDialogPane().setExpandableContent(expContent);
+
+					alert.showAndWait();
+
+					if(exit == true){
+
+						System.exit(1);
+					}
 
 	}
 

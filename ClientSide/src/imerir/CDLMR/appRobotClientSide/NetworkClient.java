@@ -1,7 +1,13 @@
 package imerir.CDLMR.appRobotClientSide;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Optional;
 
 import imerir.CDLMR.trajectoire.SvgMaison;
+import imerir.CDLMR.trajectoire.Trajectoire;
+import imerir.CDLMR.trajectoire.Trajectoire.Type;
+import imerir.CDLMR.trajectoire.Vector2;
+import javafx.scene.control.TextInputDialog;
 
 import java.io.*;
 
@@ -14,15 +20,74 @@ public class NetworkClient
 		System.out.println("entered envoyer");
 
 		int serverPort = 30000;
-		InetAddress host = InetAddress.getByName("172.30.1.176");
-		System.out.println("Connecting to server on port " + serverPort);
+
+		boolean ipFound = false;
+		Optional<String> result = null;
+		String ipString = null;
+
+		while(ipFound == false){
+			TextInputDialog dialog = new TextInputDialog("192.168.1.7");
+			dialog.setTitle("IP dialog");
+			dialog.setHeaderText("IP plz");
+			dialog.setContentText("Please enter the IP adress of the server:");
+
+			// Traditional way to get the response value.
+			result = dialog.showAndWait();
+
+			ipFound = result.isPresent();
+
+		}
+
+		if (result.isPresent() == false){
+			ipString = result.get();
+		}
+
+		InetAddress host = InetAddress.getByName(ipString);
+		System.out.println("Connecting to server " + ipString + " on port " + serverPort);
 
 		Socket socket = new Socket(host,serverPort);
+		System.out.println("socket created");
 		//Socket socket = new Socket("127.0.0.1", serverPort);
 		System.out.println("Just connected to " + socket.getRemoteSocketAddress());
 		ObjectOutputStream objectOut = new ObjectOutputStream ( socket.getOutputStream() );
+		System.out.println("stream opened");
 
-		objectOut.writeObject(svg);
+		//objectOut.writeObject(svg);
+
+		// ---------------------------------------------
+
+		Vector2 p1 = new Vector2(158,81);
+		Vector2 p2 = new Vector2(137,88);
+		Vector2 p3 = new Vector2(128,102);
+
+		ArrayList<Vector2> courbe = new ArrayList<Vector2>();
+		Trajectoire test = new Trajectoire(Type.LINE,courbe );
+		courbe.add(p1);courbe.add(p2);courbe.add(p3);
+
+		Vector2 p4 = new Vector2(139,120);
+		Vector2 p5 = new Vector2(163,121);
+		Vector2 p6 = new Vector2(172,108);
+		Vector2 p7 = new Vector2(170,91);
+		Vector2 p8 = new Vector2(158,81);
+
+
+		ArrayList<Vector2> courbe2 = new ArrayList<Vector2>();
+		Trajectoire test2 = new Trajectoire(Type.LINE,courbe2 );
+		courbe2.add(p4);courbe2.add(p5);courbe2.add(p6);courbe2.add(p7);courbe2.add(p8);
+
+		ArrayList<Trajectoire> al = new ArrayList<Trajectoire>();
+
+		al.add(test);
+		al.add(test2);
+
+
+
+		SvgMaison svgm = new SvgMaison(al);
+		objectOut.writeObject(svgm);
+
+
+				// ---------------------------------
+
 		System.out.println("succesfully sent object");
 
 

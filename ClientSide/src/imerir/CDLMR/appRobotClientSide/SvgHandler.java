@@ -13,19 +13,28 @@ import imerir.CDLMR.trajectoire.Trajectoire.Type;
 
 public class SvgHandler
 {
+
    public SvgMaison createSvgMaison(String filePath) throws JDOMException, IOException
    {
-	  System.out.println("entered getSvgMaison");
+	  System.out.println("entered createSvgMaison");
 
 	  SvgMaison svgMaison;
 	  ArrayList<Trajectoire> tab;
 	  Element racine;
+
+	  System.out.println("1");
+
 	  org.jdom2.Document document = null;
+	  System.out.println("2");
 
       SAXBuilder sxb = new SAXBuilder();
+	  System.out.println("3");
+
       document = sxb.build(new File(filePath));
+	  System.out.println("4");
 
       racine = document.getRootElement();
+	  System.out.println("5");
 
       tab=extractTrajectories(new ArrayList<Trajectoire>(), racine);
 
@@ -194,11 +203,7 @@ public class SvgHandler
       return trajectories;
    }
 
-   /**
-	 * l'appli va creer et renvoyer un objet SvgMaison
-	 *
-	 * @param cheminFichier
-	 */
+   /*
 	public SvgMaison creationSvgMaison(String cheminFichier)
 	{
 		System.out.println("entered creationSvgMaison");
@@ -233,4 +238,5 @@ public class SvgHandler
 
 		return sm;
 	}
+	*/
 }
