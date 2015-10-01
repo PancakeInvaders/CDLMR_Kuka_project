@@ -65,7 +65,13 @@ public class MainController extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+        	notifyHandleException(
+        			e,
+        			"Error",
+        			"IOException occured in initRootLayout",
+        			"\"view/RootLayout.fxml\" probably could not be read",
+        			false);
+            //e.printStackTrace();
         }
     }
 
@@ -89,7 +95,13 @@ public class MainController extends Application {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
+        	notifyHandleException(
+        			e,
+        			"Error",
+        			"IOException occured in showBasicIHM",
+        			"\"view/BasicIHM.fxml\" probably could not be read",
+        			false);
+            //e.printStackTrace();
         }
     }
 

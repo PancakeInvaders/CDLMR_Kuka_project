@@ -36,25 +36,37 @@ public class NetworkClient
 		String ipString = null;
 
 		while(ipFound == false){
-			TextInputDialog dialog = new TextInputDialog("192.168.1.7");
+			TextInputDialog dialog = new TextInputDialog("172.30.1.176");
 			dialog.setTitle("IP dialog");
 			dialog.setHeaderText("IP plz");
 			dialog.setContentText("Please enter the IP adress of the server:");
 
 			// Traditional way to get the response value.
 			result = dialog.showAndWait();
-
 			ipFound = result.isPresent();
 
+			//dialog = new TextInputDialog("192.168.1.7");
+			//dialog.setTitle("IP dialog");
+			//dialog.setHeaderText("Enter some text, or use default value.");
+			//result = dialog.showAndWait();
+
+			ipString = "none.";
+			if (result.isPresent()) {
+				ipString = result.get();
+			}
+			System.out.println("Text entered: " + ipString);
+
 		}
 
-		if (result.isPresent() == false){
-			ipString = result.get();
-		}
+		//if (result.isPresent() == false){
+		//	ipString = result.get();
+		//}
 
 		InetAddress host = InetAddress.getByName(ipString);
 		System.out.println("Connecting to server " + ipString + " on port " + serverPort);
 
+		System.out.println("about to create socket on host= " + host + " and on port " + serverPort);
+		//System.out.println("serverPort: " + serverPort);
 		Socket socket = new Socket(host,serverPort);
 		System.out.println("socket created");
 		//Socket socket = new Socket("127.0.0.1", serverPort);
