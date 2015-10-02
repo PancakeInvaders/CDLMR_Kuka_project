@@ -224,7 +224,7 @@ public class SvgHandler
 
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
          }
-         /*else if(courant.getName().equals("path"))
+         else if(courant.getName().equals("path"))
          {
           	System.out.println("found path");
 
@@ -243,12 +243,12 @@ public class SvgHandler
           		tabLocalTemp=tabLocal[cpt].split(",");
           		if(tabLocalTemp[0].charAt(0)=='M')
           		{
-          			xRef=Integer.parseInt(tabLocalTemp[0].sub);
+          			xRef=Integer.parseInt(tabLocalTemp[0].substring(1));
           			yRef=Integer.parseInt(tabLocalTemp[1]);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='m')
           		{
-          			xRef=Integer.parseInt(xRef+tabLocalTemp[0]);
+          			xRef=Integer.parseInt(xRef+tabLocalTemp[0].substring(1));
           			yRef=Integer.parseInt(yRef+tabLocalTemp[1]);
           		}
           		else
@@ -262,7 +262,7 @@ public class SvgHandler
           	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
           	
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
-         }*/
+         }
       }
 
       System.out.println("returning from extractTrajectories");
