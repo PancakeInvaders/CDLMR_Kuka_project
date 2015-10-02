@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imerir.CDLMR.appRobotClientSide.view.CanvasAndStuffController">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Canvas fx:id="leCanvas" height="200.0" width="200.0" />
+         </children>
+      </AnchorPane>
+   </center>
+   <left>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="60.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <AnchorPane>
+               <children>
+                  <Button fx:id="lineButton" mnemonicParsing="false" onAction="#handleLineButton" prefHeight="30.0" prefWidth="50.0" text="Line" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane GridPane.rowIndex="1">
+               <children>
+                  <Button fx:id="circleButton" mnemonicParsing="false" onAction="#handleCircleButton" prefHeight="30.0" prefWidth="50.0" text="Circle" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane GridPane.rowIndex="2">
+               <children>
+                  <Button fx:id="rectButton" mnemonicParsing="false" onAction="#handleRectButton" prefHeight="30.0" prefWidth="50.0" text="Rect" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane GridPane.rowIndex="3">
+               <children>
+                  <Button fx:id="polyLineButton" mnemonicParsing="false" onAction="#handlePolyLineButton" prefHeight="30.0" prefWidth="58.0" text="polyline" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane GridPane.rowIndex="4">
+               <children>
+                  <Button fx:id="polygonButton" mnemonicParsing="false" onAction="#handlePolygonButton" prefHeight="30.0" prefWidth="60.0" text="polygon" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane GridPane.rowIndex="5">
+               <children>
+                  <Button fx:id="ellipseButton" mnemonicParsing="false" onAction="#handleEllipseButton" prefHeight="30.0" prefWidth="50.0" text="ellipse" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane GridPane.rowIndex="6">
+               <children>
+                  <Button fx:id="bezierButton" mnemonicParsing="false" onAction="#handleBezierButton" prefHeight="30.0" prefWidth="50.0" text="Bezier" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </GridPane>
+   </left>
+   <bottom>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="filePathLabel" alignment="CENTER" prefHeight="30.0" prefWidth="260.0" text="Please choose a file" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <children>
+                  <ButtonBar prefHeight="30.0" prefWidth="260.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+                     <buttons>
+                        <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#handleChooseFileButton" text="Select File" />
+                        <Button fx:id="impressionButton" mnemonicParsing="false" onAction="#handleImpressionButton" text="Impression" />
+                     </buttons>
+                  </ButtonBar>
+               </children>
+            </AnchorPane>
+         </children>
+      </GridPane>
+   </bottom>
+</BorderPane>

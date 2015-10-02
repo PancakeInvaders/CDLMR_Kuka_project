@@ -10,8 +10,10 @@ import org.jdom2.JDOMException;
 import imerir.CDLMR.appRobotClientSide.model.IhmModel;
 import imerir.CDLMR.appRobotClientSide.model.Modele;
 import imerir.CDLMR.appRobotClientSide.view.BasicIHMController;
+import imerir.CDLMR.appRobotClientSide.view.CanvasAndStuffController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+//import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -21,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+//import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class MainController extends Application {
@@ -38,6 +41,15 @@ public class MainController extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("AddressApp");
+
+        //Screen screen = Screen.getPrimary();
+        //Rectangle2D bounds = screen.getVisualBounds();
+
+        //this.primaryStage.setX(bounds.getMinX());
+        //this.primaryStage.setY(bounds.getMinY());
+        //this.primaryStage.setWidth(bounds.getWidth());
+        //this.primaryStage.setHeight(bounds.getHeight());
+
         this.ihmModel = new IhmModel();
 
 		this.model=new Modele();
@@ -47,7 +59,9 @@ public class MainController extends Application {
 
         initRootLayout();
 
-        showBasicIHM();
+
+        showCanvasAndStuff();
+        //showBasicIHM();
     }
 
     /**
@@ -62,6 +76,7 @@ public class MainController extends Application {
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
+            primaryStage.setMaximized(true);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
@@ -70,7 +85,7 @@ public class MainController extends Application {
         			"Error",
         			"IOException occured in initRootLayout",
         			"\"view/RootLayout.fxml\" probably could not be read",
-        			false);
+        			true);
             //e.printStackTrace();
         }
     }
@@ -83,10 +98,12 @@ public class MainController extends Application {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainController.class.getResource("view/BasicIHM.fxml"));
-            AnchorPane personOverview = (AnchorPane) loader.load();
+            AnchorPane basicIHM = (AnchorPane) loader.load();
 
             // Set person overview into the center of root layout.
-            rootLayout.setCenter(personOverview);
+            //rootLayout.setCenter(basicIHM);
+            rootLayout.setBottom(basicIHM);
+
 
             // Give the controller access to the main app.
             BasicIHMController controller = loader.getController();
@@ -100,7 +117,35 @@ public class MainController extends Application {
         			"Error",
         			"IOException occured in showBasicIHM",
         			"\"view/BasicIHM.fxml\" probably could not be read",
-        			false);
+        			true);
+            //e.printStackTrace();
+        }
+    }
+
+    public void showCanvasAndStuff() {
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainController.class.getResource("view/CanvasAndStuff.fxml"));
+            BorderPane canvasAndStuff = (BorderPane) loader.load();
+
+            // Set person overview into the center of root layout.
+            rootLayout.setCenter(canvasAndStuff);
+
+            // Give the controller access to the main app.
+            CanvasAndStuffController controller = loader.getController();
+            controller.setMainController(this);
+            controller.drawShapes();
+    		model.addStateListener(controller);
+
+
+        } catch (IOException e) {
+        	notifyHandleException(
+        			e,
+        			"Error",
+        			"IOException occured in showCanvasAndStuff",
+        			"\"view/CanvasAndStuff.fxml\" probably could not be read",
+        			true);
             //e.printStackTrace();
         }
     }

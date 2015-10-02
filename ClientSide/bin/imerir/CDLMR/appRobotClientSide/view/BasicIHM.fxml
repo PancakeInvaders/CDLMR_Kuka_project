@@ -8,27 +8,23 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imerir.CDLMR.appRobotClientSide.view.BasicIHMController">
    <children>
-      <BorderPane prefHeight="300.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Label fx:id="filePathLabel" layoutX="406.0" layoutY="142.0" text="Please choose a file" AnchorPane.leftAnchor="5.0" />
-                  <Button fx:id="chooseFileButton" layoutX="352.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleChooseFileButton" text="Select File" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="84.0" />
-                  <Button fx:id="impressionButton" layoutX="341.0" layoutY="223.0" mnemonicParsing="false" onAction="#handleImpressionButton" text="Impression" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
-               </children>
-            </AnchorPane>
-         </center>
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <AnchorPane BorderPane.alignment="CENTER" />
+            <AnchorPane BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="filePathLabel" text="Please choose a file" AnchorPane.leftAnchor="5.0" />
+               </children></AnchorPane>
          </top>
-         <left>
-            <AnchorPane BorderPane.alignment="CENTER" />
-         </left>
-         <right>
-            <AnchorPane BorderPane.alignment="CENTER" />
-         </right>
          <bottom>
-            <AnchorPane BorderPane.alignment="CENTER" />
+            <AnchorPane BorderPane.alignment="CENTER">
+               <children>
+                  <ButtonBar layoutX="286.0" layoutY="146.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                    <buttons>
+                        <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#handleChooseFileButton" text="Select File" />
+                        <Button fx:id="impressionButton" mnemonicParsing="false" onAction="#handleImpressionButton" text="Impression" />
+                    </buttons>
+                  </ButtonBar>
+               </children></AnchorPane>
          </bottom>
       </BorderPane>
    </children>
