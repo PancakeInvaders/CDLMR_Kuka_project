@@ -189,6 +189,7 @@ public class SvgHandler
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
           		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,Integer.parseInt(tabLocalTemp[1])));
+          		cpt=cpt+2;
           	}
           	
 
@@ -212,6 +213,7 @@ public class SvgHandler
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
           		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,Integer.parseInt(tabLocalTemp[1])));
+          		cpt=cpt+2;
           	}
           	
           	tabLocalTemp=tabLocal[0].split(",");
