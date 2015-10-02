@@ -8,10 +8,10 @@
  */
 
 import java.net.*;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.io.*;
 import imerir.CDLMR.trajectoire.*;
-import imerir.CDLMR.trajectoire.Trajectoire.Type;
+//import imerir.CDLMR.trajectoire.Trajectoire.Type;
 
 
 public class TcpServerSocket {
