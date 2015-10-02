@@ -251,6 +251,22 @@ public class SvgHandler
           			xRef=Integer.parseInt(xRef+tabLocalTemp[0].substring(1));
           			yRef=Integer.parseInt(yRef+tabLocalTemp[1]);
           		}
+          		else if(tabLocalTemp[0].charAt(0)=='L')
+          		{
+          			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+          			arrayTemp.clear();
+          			arrayTemp.add(new Vector2(xRef ,yRef));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1))+xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));
+          			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+          		}
+          		else if(tabLocalTemp[0].charAt(0)=='l')
+          		{
+          			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+          			arrayTemp.clear();
+          			arrayTemp.add(new Vector2(xRef ,yRef));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,Integer.parseInt(tabLocalTemp[1])));
+          			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+          		}
           		else
           		{
           			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0])+xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));
