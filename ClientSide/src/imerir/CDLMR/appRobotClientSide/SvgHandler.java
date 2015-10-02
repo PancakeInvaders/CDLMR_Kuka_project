@@ -189,7 +189,7 @@ public class SvgHandler
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
           		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,Integer.parseInt(tabLocalTemp[1])));
-          		cpt=cpt+2;
+          		cpt=cpt+1;
           	}
           	
 
@@ -213,7 +213,7 @@ public class SvgHandler
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
           		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,Integer.parseInt(tabLocalTemp[1])));
-          		cpt=cpt+2;
+          		cpt=cpt+1;
           	}
           	
           	tabLocalTemp=tabLocal[0].split(",");
@@ -224,13 +224,45 @@ public class SvgHandler
 
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
          }
-         else if(courant.getName().equals("path"))
+         /*else if(courant.getName().equals("path"))
          {
-          	System.out.println("path not implemented yet");
+          	System.out.println("found path");
 
-        	//TODO
+          	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
+          	
+          	String _points = courant.getAttributeValue("d");
+          	String[] tabLocal = _points.split(" ");
+          	String[] tabLocalTemp;
+          	int xRef=0;
+          	int yRef=0;
+          	
+          	int cpt=0;
+          	
+          	while(cpt<tabLocal.length)
+          	{
+          		tabLocalTemp=tabLocal[cpt].split(",");
+          		if(tabLocalTemp[0].charAt(0)=='M')
+          		{
+          			xRef=Integer.parseInt(tabLocalTemp[0].sub);
+          			yRef=Integer.parseInt(tabLocalTemp[1]);
+          		}
+          		else if(tabLocalTemp[0].charAt(0)=='m')
+          		{
+          			xRef=Integer.parseInt(xRef+tabLocalTemp[0]);
+          			yRef=Integer.parseInt(yRef+tabLocalTemp[1]);
+          		}
+          		else
+          		{
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0])+xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));
+          		}
+          		cpt=cpt+1;
+          	}
+          	
+
+          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+          	
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
-         }
+         }*/
       }
 
       System.out.println("returning from extractTrajectories");
