@@ -10,7 +10,6 @@ import org.jdom2.JDOMException;
 import imerir.CDLMR.appRobotClientSide.model.Etat;
 import imerir.CDLMR.appRobotClientSide.model.IhmModel;
 import imerir.CDLMR.appRobotClientSide.model.Modele;
-import imerir.CDLMR.appRobotClientSide.view.BasicIHMController;
 import imerir.CDLMR.appRobotClientSide.view.CanvasAndStuffController;
 import imerir.CDLMR.trajectoire.Trajectoire;
 import imerir.CDLMR.trajectoire.Vector2;
@@ -22,7 +21,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -98,35 +96,6 @@ public class MainController extends Application {
     /**
      * Shows the person overview inside the root layout.
      */
-    public void showBasicIHM() {
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainController.class.getResource("view/BasicIHM.fxml"));
-            AnchorPane basicIHM = (AnchorPane) loader.load();
-
-            // Set person overview into the center of root layout.
-            //rootLayout.setCenter(basicIHM);
-            rootLayout.setBottom(basicIHM);
-
-
-            // Give the controller access to the main app.
-            BasicIHMController controller = loader.getController();
-            controller.setMainController(this);
-    		model.addStateListener(controller);
-
-
-        } catch (IOException e) {
-        	notifyHandleException(
-        			e,
-        			"Error",
-        			"IOException occured in showBasicIHM",
-        			"\"view/BasicIHM.fxml\" probably could not be read",
-        			true);
-            //e.printStackTrace();
-        }
-    }
-
     public void showCanvasAndStuff() {
         try {
             // Load person overview.

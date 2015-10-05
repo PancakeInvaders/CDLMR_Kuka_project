@@ -58,6 +58,9 @@ public class CanvasAndStuffController implements StateListener{
 
 	private Trajectoire trajInConstruction;
 
+	double oldx;
+	double oldy;
+
 	// Reference to the main application.
 	private MainController mainController;
 
@@ -74,6 +77,7 @@ public class CanvasAndStuffController implements StateListener{
 
 			//  disable buttons
 			impressionButton.setDisable(true);
+			drawingButton.setDisable(true);
 
 		}
 		else if( e.getNewState() == Etat.PRET){ // pret
@@ -81,6 +85,7 @@ public class CanvasAndStuffController implements StateListener{
 			// enable buttons
 
 			impressionButton.setDisable(false);
+			drawingButton.setDisable(false);
 		}
 	}
 
@@ -238,7 +243,21 @@ public class CanvasAndStuffController implements StateListener{
 	    	leCanvas.getGraphicsContext2D().beginPath();
 
 	    	leCanvas.getGraphicsContext2D().moveTo(event.getX(), event.getY());
-	    	trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)event.getY()));
+
+	    	trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - event.getY())));
+	    	leCanvas.getGraphicsContext2D().stroke();
+		}
+		else if(getDrawingMode() == DrawingMode.RECT){
+			//trajInConstruction = new Trajectoire(Type.LINE, new ArrayList<Vector2>() );
+			trajInConstruction = new Trajectoire(Type.LINE, new ArrayList<Vector2>() );
+
+	    	leCanvas.getGraphicsContext2D().beginPath();
+
+	    	oldx = event.getX();
+	    	oldy = event.getY();
+
+	    	leCanvas.getGraphicsContext2D().moveTo(event.getX(), event.getY());
+	    	trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - event.getY())));
 	    	leCanvas.getGraphicsContext2D().stroke();
 		}
 		else{
@@ -255,9 +274,33 @@ public class CanvasAndStuffController implements StateListener{
 		if(getDrawingMode() == DrawingMode.LINE){
 
 		}
+		else if(getDrawingMode() == DrawingMode.RECT){
+			/*
+			// 0 to 1
+			leCanvas.getGraphicsContext2D().lineTo(event.getX(), oldy);
+			leCanvas.getGraphicsContext2D().stroke();
+
+			// 1 to 2
+			leCanvas.getGraphicsContext2D().lineTo(event.getX(), event.getY());
+			leCanvas.getGraphicsContext2D().stroke();
+
+			// 2 to 3
+			leCanvas.getGraphicsContext2D().lineTo(oldx, event.getY());
+			leCanvas.getGraphicsContext2D().stroke();
+
+
+			// 3 to 0
+			leCanvas.getGraphicsContext2D().lineTo(oldx, oldy);
+			leCanvas.getGraphicsContext2D().stroke();
+
+
+			 */
+		}
 		else{
 			//leCanvas.getGraphicsContext2D().lineTo(event.getX(), event.getY());
-			leCanvas.getGraphicsContext2D().lineTo( /* leCanvas.getWidth() - */ event.getX(), leCanvas.getHeight() -  event.getY());
+			leCanvas.getGraphicsContext2D().lineTo( event.getX(), event.getY());
+
+			System.out.println("x: " + event.getX() + "\ty: " + event.getY() );
 
 	    	leCanvas.getGraphicsContext2D().stroke();
 		}
@@ -272,7 +315,41 @@ public class CanvasAndStuffController implements StateListener{
 
 			leCanvas.getGraphicsContext2D().lineTo(event.getX(), event.getY());
 			leCanvas.getGraphicsContext2D().stroke();
-			trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)event.getY()));
+
+			trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - event.getY()) ) );
+			mainController.notifyAddTrajectoire(trajInConstruction);
+
+			//leCanvas.getGraphicsContext2D().clearRect(0, 0, leCanvas.getWidth(), leCanvas.getHeight());
+		}
+		else if(getDrawingMode() == DrawingMode.RECT){
+
+
+
+			// 0 to 1
+			leCanvas.getGraphicsContext2D().lineTo(event.getX(), oldy);
+			leCanvas.getGraphicsContext2D().stroke();
+
+			trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - oldy) ) );
+
+			// 1 to 2
+			leCanvas.getGraphicsContext2D().lineTo(event.getX(), event.getY());
+			leCanvas.getGraphicsContext2D().stroke();
+
+			trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - event.getY()) ) );
+
+			// 2 to 3
+			leCanvas.getGraphicsContext2D().lineTo(oldx, event.getY());
+			leCanvas.getGraphicsContext2D().stroke();
+
+			trajInConstruction.getCourbe().add(new Vector2((int)oldx, (int)(leCanvas.getHeight() - event.getY()) ) );
+
+			// 3 to 0
+			leCanvas.getGraphicsContext2D().lineTo(oldx, oldy);
+			leCanvas.getGraphicsContext2D().stroke();
+
+			trajInConstruction.getCourbe().add(new Vector2((int)oldx, (int)(leCanvas.getHeight() - oldy) ) );
+
+
 			mainController.notifyAddTrajectoire(trajInConstruction);
 
 			//leCanvas.getGraphicsContext2D().clearRect(0, 0, leCanvas.getWidth(), leCanvas.getHeight());
