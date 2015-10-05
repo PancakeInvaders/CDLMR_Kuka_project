@@ -257,7 +257,7 @@ public class CanvasAndStuffController implements StateListener{
 		}
 		else{
 			//leCanvas.getGraphicsContext2D().lineTo(event.getX(), event.getY());
-			leCanvas.getGraphicsContext2D().lineTo( leCanvas.getWidth() - event.getX(), leCanvas.getHeight() - event.getY());
+			leCanvas.getGraphicsContext2D().lineTo( /* leCanvas.getWidth() - */ event.getX(), /* leCanvas.getHeight() - */ event.getY());
 
 	    	leCanvas.getGraphicsContext2D().stroke();
 		}
