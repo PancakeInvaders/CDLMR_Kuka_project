@@ -5,7 +5,6 @@ import java.io.*;
 import org.jdom2.*;
 import org.jdom2.input.*;
 
-import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
@@ -297,7 +296,59 @@ public class SvgHandler
           			arrayTemp.add(new Vector2(xRef ,yRef));
           			arrayTemp.add(new Vector2(yM ,xM));
           		}
-          		/*else if(tabLocalTemp[0].charAt(0)=='Q')
+          		else if(tabLocalTemp[0].charAt(0)=='q')
+          		{
+          			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+          			arrayTemp = new ArrayList<Vector2>();
+          			int axTemp = xRef;
+          			int ayTemp = yRef;
+          			int bxTemp = Integer.parseInt(tabLocalTemp[0].substring(1))+xRef;
+          			int byTemp = Integer.parseInt(tabLocalTemp[0]+yRef);
+          			cpt++;
+          			tabLocalTemp=tabLocal[cpt].split(",");
+          			int cxTemp = Integer.parseInt(tabLocalTemp[0].substring(1))+xRef;
+          			int cyTemp = Integer.parseInt(tabLocalTemp[0]+yRef);
+          			
+          			float uax = (axTemp-bxTemp)/50;
+          			float uay = (ayTemp-byTemp)/50;
+          			float ucx = (cxTemp-bxTemp)/50;
+          			float ucy = (cyTemp-byTemp)/50;
+          			
+          			int cptTemp=1;
+          			float p1x;
+          			float p1y;
+          			float p2x;
+          			float p2y;
+          			float fragPx;
+          			float fragPy;
+          			
+          			arrayTemp.add((new Vector2(cxTemp ,cyTemp)));
+          			
+          			while(cptTemp<49)
+          			{
+          				
+          				p1x=axTemp+uax*cpt;
+          				p1y=ayTemp+uay*cpt;
+          				p2x=axTemp+ucx*cpt;
+          				p2y=byTemp+ucy*cpt;
+          				
+          				fragPx=(p1x-p2x)/50;
+          				fragPy=(p1y-p2y)/50;
+              			
+              			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,(int)(p1y+fragPy*cpt))));
+          				
+          				cptTemp++;
+          			}
+          			
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,Integer.parseInt(tabLocalTemp[1])));
+          			
+          			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+          			arrayTemp = new ArrayList<Vector2>();
+          			
+          			xRef=cxTemp;
+          			yRef=cyTemp;
+          		}
+          		else if(tabLocalTemp[0].charAt(0)=='Q')
           		{
           			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
           			arrayTemp = new ArrayList<Vector2>();
@@ -310,38 +361,45 @@ public class SvgHandler
           			int cxTemp = Integer.parseInt(tabLocalTemp[0].substring(1));
           			int cyTemp = Integer.parseInt(tabLocalTemp[0]);
           			
-          			float uax = axTemp-bxTemp/10;
-          			float uay = ayTemp-byTemp/10;
-          			float ucx = cxTemp-bxTemp/10;
-          			float ucy = cyTemp-byTemp/10;
+          			float uax = (axTemp-bxTemp)/50;
+          			float uay = (ayTemp-byTemp)/50;
+          			float ucx = (cxTemp-bxTemp)/50;
+          			float ucy = (cyTemp-byTemp)/50;
           			
           			int cptTemp=1;
-          			int p1x;
-          			int p1y;
-          			int p2x;
-          			int p2y;
+          			float p1x;
+          			float p1y;
+          			float p2x;
+          			float p2y;
+          			float fragPx;
+          			float fragPy;
           			
           			arrayTemp.add((new Vector2(cxTemp ,cyTemp)));
           			
-          			while(cptTemp<9)
+          			while(cptTemp<49)
           			{
           				
-          				axTemp+uax*cpt;
+          				p1x=axTemp+uax*cpt;
+          				p1y=ayTemp+uay*cpt;
+          				p2x=axTemp+ucx*cpt;
+          				p2y=byTemp+ucy*cpt;
+          				
+          				fragPx=(p1x-p2x)/50;
+          				fragPy=(p1y-p2y)/50;
+              			
+              			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,(int)(p1y+fragPy*cpt))));
           				
           				cptTemp++;
           			}
           			
-          			arrayTemp.add((new Vector2(xRef ,yRef)));
-          				
-          			arrayTemp.add(new Vector2(xRef ,yRef));
           			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,Integer.parseInt(tabLocalTemp[1])));
           			
-          			trajectories.add(new Trajectoire(Type.SPLINE, arrayTemp));
+          			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
           			arrayTemp = new ArrayList<Vector2>();
           			
           			xRef=cxTemp;
           			yRef=cyTemp;
-          		}*/
+          		}
           		else
           		{
           			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0])+xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));
