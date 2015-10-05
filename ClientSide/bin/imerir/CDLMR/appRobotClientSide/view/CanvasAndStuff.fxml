@@ -8,9 +8,9 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imerir.CDLMR.appRobotClientSide.view.CanvasAndStuffController">
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <Canvas fx:id="leCanvas" height="200.0" width="200.0" />
+            <Canvas fx:id="leCanvas" height="200.0" onMouseDragged="#handleMouseDragged" onMousePressed="#handleMousePressed" onMouseReleased="#handleMouseRelease" width="290.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
    </center>
@@ -88,6 +88,7 @@
                      <buttons>
                         <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#handleChooseFileButton" text="Select File" />
                         <Button fx:id="impressionButton" mnemonicParsing="false" onAction="#handleImpressionButton" text="Impression" />
+                        <Button fx:id="drawingButton" mnemonicParsing="false" onAction="#handleDrawButton" text="Draw" />
                      </buttons>
                   </ButtonBar>
                </children>

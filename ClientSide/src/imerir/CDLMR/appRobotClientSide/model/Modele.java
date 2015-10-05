@@ -16,24 +16,28 @@ public class Modele
 
 	private SvgMaison svgm;
 
+	private SvgMaison svgInConstruction;
+
 	public Modele()
 	{
 		listeners = new EventListenerList();
-		this.etat=new Etat();
+		this.etat= Etat.PRET;
 
 		svgm = new SvgMaison(new ArrayList<Trajectoire>());
+
+		svgInConstruction = new SvgMaison(new ArrayList<Trajectoire>());
 	}
 
-	public int getEtat()
+	public Etat getEtat()
 	{
-		return this.etat.getEtat();
+		return this.etat;
 	}
 
-	public void setEtat(int n)
+	public void setEtat(Etat e)
 	{
 		System.out.println("entered setEtat");
 
-		this.etat.setEtat(n);
+		this.etat = e;
 		fireStateChanged();
 
 	}
@@ -72,6 +76,14 @@ public class Modele
 
 	public SvgMaison getSvgm() {
 		return svgm;
+	}
+
+	public SvgMaison getSvgInConstruction() {
+		return svgInConstruction;
+	}
+
+	public void setSvgInConstruction(SvgMaison svgInConstruction) {
+		this.svgInConstruction = svgInConstruction;
 	}
 
 }

@@ -7,10 +7,13 @@ import java.io.StringWriter;
 
 import org.jdom2.JDOMException;
 
+import imerir.CDLMR.appRobotClientSide.model.Etat;
 import imerir.CDLMR.appRobotClientSide.model.IhmModel;
 import imerir.CDLMR.appRobotClientSide.model.Modele;
 import imerir.CDLMR.appRobotClientSide.view.BasicIHMController;
 import imerir.CDLMR.appRobotClientSide.view.CanvasAndStuffController;
+import imerir.CDLMR.trajectoire.Trajectoire;
+import imerir.CDLMR.trajectoire.Vector2;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 //import javafx.geometry.Rectangle2D;
@@ -36,6 +39,8 @@ public class MainController extends Application {
 	//private StateListener vue;
 	private SvgHandler monSvgHandler;
 	private NetworkClient client;
+
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -76,7 +81,7 @@ public class MainController extends Application {
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
-            primaryStage.setMaximized(true);
+            //primaryStage.setMaximized(true);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
@@ -135,7 +140,7 @@ public class MainController extends Application {
             // Give the controller access to the main app.
             CanvasAndStuffController controller = loader.getController();
             controller.setMainController(this);
-            controller.drawShapes();
+            controller.initialize();
     		model.addStateListener(controller);
 
 
@@ -198,7 +203,7 @@ public class MainController extends Application {
 
 			System.out.println("1");
 
-			this.model.setEtat(1);
+			this.model.setEtat(Etat.BLOQUE);
 
 			System.out.println("2");
 
@@ -206,7 +211,7 @@ public class MainController extends Application {
 
 			System.out.println("3");
 
-			this.model.setEtat(0);
+			this.model.setEtat(Etat.PRET);
 
 			System.out.println("4");
 		}
@@ -280,5 +285,32 @@ public class MainController extends Application {
 					}
 
 	}
+
+	public void notifyAddTrajectoire(Trajectoire t){
+
+		model.getSvgInConstruction().getTrajectoires().add(t);
+	}
+
+	public void notifyHandleDrawButton() {
+
+		System.out.println("entered notifyHandleDrawButton");
+
+		int i =0;
+		for(Trajectoire t : model.getSvgInConstruction().getTrajectoires()){
+
+			System.out.println("Trajectoire " + i + " de type " + t.getType());
+
+			for(Vector2 v : t.getCourbe()){
+
+				v.afficher();
+			}
+
+			i++;
+		}
+
+		this.client.envoyer(model.getSvgInConstruction());
+
+	}
+
 
 }

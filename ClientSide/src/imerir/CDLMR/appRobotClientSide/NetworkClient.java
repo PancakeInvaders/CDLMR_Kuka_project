@@ -1,12 +1,12 @@
 package imerir.CDLMR.appRobotClientSide;
 import java.net.*;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Optional;
 
 import imerir.CDLMR.trajectoire.SvgMaison;
-import imerir.CDLMR.trajectoire.Trajectoire;
-import imerir.CDLMR.trajectoire.Trajectoire.Type;
-import imerir.CDLMR.trajectoire.Vector2;
+//import imerir.CDLMR.trajectoire.Trajectoire;
+//import imerir.CDLMR.trajectoire.Trajectoire.Type;
+//import imerir.CDLMR.trajectoire.Vector2;
 import javafx.scene.control.TextInputDialog;
 
 import java.io.*;
@@ -74,8 +74,8 @@ public class NetworkClient
 		ObjectOutputStream objectOut = new ObjectOutputStream ( socket.getOutputStream() );
 		System.out.println("stream opened");
 
-		//objectOut.writeObject(svg);
-
+		objectOut.writeObject(svg);
+/*
 		// ---------------------------------------------
 
 		Vector2 p1 = new Vector2(158,81);
@@ -109,7 +109,7 @@ public class NetworkClient
 
 
 				// ---------------------------------
-
+*/
 		System.out.println("succesfully sent object");
 
 
