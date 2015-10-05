@@ -5,6 +5,7 @@ import java.io.*;
 import org.jdom2.*;
 import org.jdom2.input.*;
 
+import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
@@ -233,6 +234,8 @@ public class SvgHandler
           	String _points = courant.getAttributeValue("d");
           	String[] tabLocal = _points.split(" ");
           	String[] tabLocalTemp;
+          	int xM=0;
+          	int yM=0;
           	int xRef=0;
           	int yRef=0;
           	
@@ -243,30 +246,102 @@ public class SvgHandler
           		tabLocalTemp=tabLocal[cpt].split(",");
           		if(tabLocalTemp[0].charAt(0)=='M')
           		{
-          			xRef=Integer.parseInt(tabLocalTemp[0].substring(1));
-          			yRef=Integer.parseInt(tabLocalTemp[1]);
+          			xM=xRef=Integer.parseInt(tabLocalTemp[0].substring(1));
+          			yM=yRef=Integer.parseInt(tabLocalTemp[1]);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='m')
           		{
-          			xRef=Integer.parseInt(xRef+tabLocalTemp[0].substring(1));
-          			yRef=Integer.parseInt(yRef+tabLocalTemp[1]);
+          			xM=xRef=Integer.parseInt(xRef+tabLocalTemp[0].substring(1));
+          			yM=yRef=Integer.parseInt(yRef+tabLocalTemp[1]);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='L')
           		{
-          			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
-          			arrayTemp.clear();
           			arrayTemp.add(new Vector2(xRef ,yRef));
-          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1))+xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));
-          			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,Integer.parseInt(tabLocalTemp[1])));
+          			xRef=Integer.parseInt(xRef+tabLocalTemp[0].substring(1));
+          			yRef=Integer.parseInt(yRef+tabLocalTemp[1]);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='l')
           		{
+          			arrayTemp.add(new Vector2(xRef ,yRef));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1))+xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));
+          			xRef=Integer.parseInt(xRef+tabLocalTemp[0].substring(1));
+          			yRef=Integer.parseInt(yRef+tabLocalTemp[1]);
+          		}
+          		else if(tabLocalTemp[0].charAt(0)=='H')
+          		{
+          			arrayTemp.add(new Vector2(xRef ,yRef));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,yRef));
+          			xRef=Integer.parseInt(tabLocalTemp[0].substring(1));
+          		}
+          		else if(tabLocalTemp[0].charAt(0)=='h')
+          		{
+          			arrayTemp.add(new Vector2(xRef ,yRef));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1))+xRef ,yRef));
+          			xRef=Integer.parseInt(tabLocalTemp[0].substring(1)+xRef);
+          		}
+          		else if(tabLocalTemp[0].charAt(0)=='V')
+          		{
+          			arrayTemp.add(new Vector2(xRef ,yRef));
+          			arrayTemp.add(new Vector2(xRef ,Integer.parseInt(tabLocalTemp[1])));
+          			yRef=Integer.parseInt(tabLocalTemp[1]);
+          		}
+          		else if(tabLocalTemp[0].charAt(0)=='v')
+          		{
+          			arrayTemp.add(new Vector2(xRef ,yRef));
+          			arrayTemp.add(new Vector2(xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));
+          			yRef=Integer.parseInt(tabLocalTemp[1])+yRef;
+          		}
+          		else if(tabLocalTemp[0].charAt(0)=='Z' || tabLocalTemp[0].charAt(0)=='z')
+          		{
+          			arrayTemp.add(new Vector2(xRef ,yRef));
+          			arrayTemp.add(new Vector2(yM ,xM));
+          		}
+          		/*else if(tabLocalTemp[0].charAt(0)=='Q')
+          		{
           			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
-          			arrayTemp.clear();
+          			arrayTemp = new ArrayList<Vector2>();
+          			int axTemp = xRef;
+          			int ayTemp = yRef;
+          			int bxTemp = Integer.parseInt(tabLocalTemp[0].substring(1));
+          			int byTemp = Integer.parseInt(tabLocalTemp[0]);
+          			cpt++;
+          			tabLocalTemp=tabLocal[cpt].split(",");
+          			int cxTemp = Integer.parseInt(tabLocalTemp[0].substring(1));
+          			int cyTemp = Integer.parseInt(tabLocalTemp[0]);
+          			
+          			float uax = axTemp-bxTemp/10;
+          			float uay = ayTemp-byTemp/10;
+          			float ucx = cxTemp-bxTemp/10;
+          			float ucy = cyTemp-byTemp/10;
+          			
+          			int cptTemp=1;
+          			int p1x;
+          			int p1y;
+          			int p2x;
+          			int p2y;
+          			
+          			arrayTemp.add((new Vector2(cxTemp ,cyTemp)));
+          			
+          			while(cptTemp<9)
+          			{
+          				
+          				axTemp+uax*cpt;
+          				
+          				cptTemp++;
+          			}
+          			
+          			arrayTemp.add((new Vector2(xRef ,yRef)));
+          				
           			arrayTemp.add(new Vector2(xRef ,yRef));
           			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,Integer.parseInt(tabLocalTemp[1])));
-          			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
-          		}
+          			
+          			trajectories.add(new Trajectoire(Type.SPLINE, arrayTemp));
+          			arrayTemp = new ArrayList<Vector2>();
+          			
+          			xRef=cxTemp;
+          			yRef=cyTemp;
+          		}*/
           		else
           		{
           			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0])+xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));

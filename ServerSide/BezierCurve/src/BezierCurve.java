@@ -1,4 +1,16 @@
-public class BezierCurve {
+import java.io.*;
+
+import org.jdom2.*;
+import org.jdom2.input.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Iterator;
+import imerir.CDLMR.trajectoire.*;
+import imerir.CDLMR.trajectoire.Trajectoire.Type;
+
+public class BezierCurve
+{
 
 	Vector2 points[];
 	
