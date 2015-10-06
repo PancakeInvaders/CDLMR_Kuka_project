@@ -7,5 +7,6 @@ public enum DrawingMode {
 	POLYLINE,
 	POLYGON,
 	ELLIPSE,
-	BEZIER
+	BEZIER,
+	CURVE
 }

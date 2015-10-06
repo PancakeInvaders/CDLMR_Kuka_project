@@ -1,10 +1,7 @@
 package imerir.CDLMR.appRobotClientSide.view;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -24,8 +21,11 @@ import imerir.CDLMR.trajectoire.Vector2;
 
 public class CanvasAndStuffController implements StateListener{
 
+	//int nbPointCurve = 0;
+
 	@FXML
     private Label filePathLabel;
+
 
 	@FXML
     private Button chooseFileButton;
@@ -53,6 +53,11 @@ public class CanvasAndStuffController implements StateListener{
     private Button ellipseButton;
 	@FXML
     private Button bezierButton;
+	@FXML
+    private Button curveButton;
+	@FXML
+    private Button clearButton;
+
 
 	private DrawingMode drawingMode;
 
@@ -126,6 +131,8 @@ public class CanvasAndStuffController implements StateListener{
 	}
 
 	@FXML
+
+
     private void handleEllipseButton(){
 
 		System.out.println("handleEllipseButton");
@@ -138,6 +145,24 @@ public class CanvasAndStuffController implements StateListener{
 
 		System.out.println("handlePathButton");
 		setDrawingMode(DrawingMode.BEZIER);
+	}
+
+	@FXML
+    private void handleCurveButton(){
+
+		System.out.println("handleCurveButton");
+		setDrawingMode(DrawingMode.CURVE);
+	}
+
+	@FXML
+    private void handleClearButton(){
+
+		System.out.println("handleClearButton");
+
+		leCanvas.getGraphicsContext2D().clearRect(0, 0, leCanvas.getWidth(), leCanvas.getHeight());
+
+		mainController.notifyClearSvgInConstruction();
+
 	}
 
 	 @FXML
@@ -169,6 +194,7 @@ public class CanvasAndStuffController implements StateListener{
 
 	    mainController.notifyHandleDrawButton();
 
+
 	}
 
 	public void initialize() {
@@ -183,43 +209,12 @@ public class CanvasAndStuffController implements StateListener{
 
 		drawingMode = DrawingMode.LINE;
 
+		circleButton.setDisable(true);
+		polyLineButton.setDisable(true);
+		polygonButton.setDisable(true);
+		ellipseButton.setDisable(true);
+		bezierButton.setDisable(true);
 
-		InvalidationListener listener = new InvalidationListener(){
-		    @Override
-		    public void invalidated(Observable o) {
-		        redraw();
-		    }
-
-
-		};
-
-		leCanvas.widthProperty().addListener(listener);
-		leCanvas.heightProperty().addListener(listener);
-
-	}
-
-
-	private void redraw() {
-
-		GraphicsContext gc = leCanvas.getGraphicsContext2D();
-
-
-		double canvasWidth = gc.getCanvas().getWidth();
-        double canvasHeight = gc.getCanvas().getHeight();
-
-        gc.setFill(Color.LIGHTGRAY);
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(5);
-
-        gc.fill();
-        gc.strokeRect(
-                0,              //x of the upper left corner
-                0,              //y of the upper left corner
-                canvasWidth,    //width of the rectangle
-                canvasHeight);  //height of the rectangle
-
-        gc.setFill(Color.RED);
-        gc.setLineWidth(1);
 	}
 
 	public DrawingMode getDrawingMode() {
@@ -260,6 +255,25 @@ public class CanvasAndStuffController implements StateListener{
 	    	trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - event.getY())));
 	    	leCanvas.getGraphicsContext2D().stroke();
 		}
+		else if(getDrawingMode() == DrawingMode.CURVE){
+
+    		System.out.println("new trajectory created");
+
+
+			trajInConstruction = new Trajectoire(Type.LINE, new ArrayList<Vector2>() );
+
+			leCanvas.getGraphicsContext2D().beginPath();
+
+	    	leCanvas.getGraphicsContext2D().moveTo(event.getX(), event.getY());
+
+	    	trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - event.getY())));
+
+	    	//nbPointCurve++;
+	    	//System.out.println("nbPointCurve: " + nbPointCurve);
+
+	    	leCanvas.getGraphicsContext2D().stroke();
+
+		}
 		else{
 	    	leCanvas.getGraphicsContext2D().beginPath();
 	    	leCanvas.getGraphicsContext2D().moveTo(event.getX(), event.getY());
@@ -275,26 +289,28 @@ public class CanvasAndStuffController implements StateListener{
 
 		}
 		else if(getDrawingMode() == DrawingMode.RECT){
-			/*
-			// 0 to 1
-			leCanvas.getGraphicsContext2D().lineTo(event.getX(), oldy);
-			leCanvas.getGraphicsContext2D().stroke();
 
-			// 1 to 2
-			leCanvas.getGraphicsContext2D().lineTo(event.getX(), event.getY());
-			leCanvas.getGraphicsContext2D().stroke();
+		}
+		else if(getDrawingMode() == DrawingMode.CURVE){
 
-			// 2 to 3
-			leCanvas.getGraphicsContext2D().lineTo(oldx, event.getY());
-			leCanvas.getGraphicsContext2D().stroke();
+	    	if(trajInConstruction.getCourbe().size() >= 300){
+	    		System.out.println("new trajectory created");
+				mainController.notifyAddTrajectoire(trajInConstruction);
+				trajInConstruction = new Trajectoire(Type.LINE, new ArrayList<Vector2>() );
+	    	}
 
-
-			// 3 to 0
-			leCanvas.getGraphicsContext2D().lineTo(oldx, oldy);
-			leCanvas.getGraphicsContext2D().stroke();
+			leCanvas.getGraphicsContext2D().lineTo( event.getX(), event.getY());
 
 
-			 */
+			System.out.println("x: " + event.getX() + "\ty: " + event.getY() );
+
+	    	leCanvas.getGraphicsContext2D().stroke();
+
+	    	trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - event.getY())));
+	    	//nbPointCurve++;
+	    	//System.out.println("nbPointCurve: " + nbPointCurve);
+
+
 		}
 		else{
 			//leCanvas.getGraphicsContext2D().lineTo(event.getX(), event.getY());
@@ -354,8 +370,19 @@ public class CanvasAndStuffController implements StateListener{
 
 			//leCanvas.getGraphicsContext2D().clearRect(0, 0, leCanvas.getWidth(), leCanvas.getHeight());
 		}
+		else if(getDrawingMode() == DrawingMode.CURVE){
+			//TODO
+		}
 		else {
+			leCanvas.getGraphicsContext2D().lineTo(event.getX(), event.getY());
+			leCanvas.getGraphicsContext2D().stroke();
 
+			trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - event.getY()) ) );
+
+	    	//nbPointCurve++;
+	    	//System.out.println("nbPointCurve: " + nbPointCurve);
+
+			mainController.notifyAddTrajectoire(trajInConstruction);
 
 		}
 

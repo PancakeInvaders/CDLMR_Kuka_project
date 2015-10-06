@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import org.jdom2.JDOMException;
 
@@ -11,9 +12,11 @@ import imerir.CDLMR.appRobotClientSide.model.Etat;
 import imerir.CDLMR.appRobotClientSide.model.IhmModel;
 import imerir.CDLMR.appRobotClientSide.model.Modele;
 import imerir.CDLMR.appRobotClientSide.view.CanvasAndStuffController;
+import imerir.CDLMR.trajectoire.SvgMaison;
 import imerir.CDLMR.trajectoire.Trajectoire;
 import imerir.CDLMR.trajectoire.Vector2;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 //import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -205,6 +208,14 @@ public class MainController extends Application {
 					false);
 
 			return;
+		} catch (SizeException e) {
+			// TODO Auto-generated catch block
+			notifyHandleException(
+					e,
+					"Error",
+					"An size error has been encountered during createSvgMaison",
+					"It seems like the ",
+					false);
 		}
 
 	}
@@ -264,20 +275,43 @@ public class MainController extends Application {
 
 		System.out.println("entered notifyHandleDrawButton");
 
-		int i =0;
-		for(Trajectoire t : model.getSvgInConstruction().getTrajectoires()){
 
-			System.out.println("Trajectoire " + i + " de type " + t.getType());
+		Task <Void> drawTask = new Task<Void>(){
 
-			for(Vector2 v : t.getCourbe()){
+			  @Override
+			  protected Void call() throws Exception {
 
-				v.afficher();
-			}
+				  System.out.println("entered drawTask's call");
 
-			i++;
-		}
+					int i =0;
+					for(Trajectoire t : model.getSvgInConstruction().getTrajectoires()){
 
-		this.client.envoyer(model.getSvgInConstruction());
+						System.out.println("Trajectoire " + i + " de type " + t.getType());
+
+						for(Vector2 v : t.getCourbe()){
+
+							v.afficher();
+						}
+
+						i++;
+					}
+
+					client.envoyer(model.getSvgInConstruction());
+
+				  return null;
+			  }
+			};
+
+			//start Task
+		    new Thread(drawTask).start();
+
+
+
+	}
+
+	public void notifyClearSvgInConstruction(){
+
+		model.setSvgInConstruction( new SvgMaison( new ArrayList<Trajectoire>() ) );
 
 	}
 
