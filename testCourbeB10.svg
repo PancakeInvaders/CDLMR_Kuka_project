@@ -3,7 +3,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
 "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg"
-width="800" height="800" >
+width="200" height="200" >
 
-<path d="M200,200 q0,100 0,200"/>
+<path d="M100,100 q0,50 0,100"/>
 </svg>
