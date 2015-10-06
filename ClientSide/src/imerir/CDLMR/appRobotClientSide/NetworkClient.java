@@ -4,6 +4,8 @@ import java.net.*;
 import java.util.Optional;
 
 import imerir.CDLMR.trajectoire.SvgMaison;
+import imerir.CDLMR.trajectoire.Trajectoire;
+import imerir.CDLMR.trajectoire.Vector2;
 //import imerir.CDLMR.trajectoire.Trajectoire;
 //import imerir.CDLMR.trajectoire.Trajectoire.Type;
 //import imerir.CDLMR.trajectoire.Vector2;
@@ -26,6 +28,19 @@ public class NetworkClient
   public void envoyer(SvgMaison svg)
   {
 	try {
+
+		System.out.println("In envoyer, svg:");
+		int i = 0;
+		for(Trajectoire t : svg.getTrajectoires()){
+
+			System.out.println("trajectoire " + i + " de type " + t.getType());
+
+			for(Vector2 v : t.getCourbe()){
+
+				v.afficher();
+			}
+
+		}
 
 		System.out.println("entered envoyer");
 
