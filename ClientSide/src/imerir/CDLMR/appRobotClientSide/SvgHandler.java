@@ -113,7 +113,7 @@ public class SvgHandler
 
          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
          }
-         else if(courant.getName().equals("circle"))
+         /*else if(courant.getName().equals("circle"))
          {
           	System.out.println("found a circle");
 
@@ -136,8 +136,29 @@ public class SvgHandler
          	arrayTemp.add(new Vector2(_cx-_r ,_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
+         }*/
+         else if(courant.getName().equals("circle"))
+         {
+          	System.out.println("found a circle");
+
+          	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
+
+        	int _cx = Integer.parseInt(courant.getAttributeValue("cx"));
+            int _cy = Integer.parseInt(courant.getAttributeValue("cy"));
+            int _r = Integer.parseInt(courant.getAttributeValue("r"));
+            double alpha=0;
+            double incr=Math.PI/180;
+            
+            while(alpha<=Math.PI*2)
+            {
+            	arrayTemp.add(new Vector2((int)(_r*Math.cos(alpha)+_cx),(int)(_r*Math.sin(alpha)+_cy)));
+            	
+            	alpha=alpha+incr;
+            }
+
+         	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
          }
-         else if(courant.getName().equals("ellipse"))
+         /*else if(courant.getName().equals("ellipse"))
          {
         	 System.out.println("found an ellipse");
 
@@ -161,6 +182,28 @@ public class SvgHandler
          	arrayTemp.add(new Vector2(_cx-_rx ,_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
+         }*/
+         else if(courant.getName().equals("ellipse"))
+         {
+        	 System.out.println("found a ellipse");
+
+           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
+
+           	int _cx = Integer.parseInt(courant.getAttributeValue("cx"));
+            int _cy = Integer.parseInt(courant.getAttributeValue("cy"));
+            int _rx = Integer.parseInt(courant.getAttributeValue("rx"));
+            int _ry = Integer.parseInt(courant.getAttributeValue("ry"));
+            double alpha=0;
+            double incr=Math.PI/180;
+             
+             while(alpha<=Math.PI*2)
+             {
+             	arrayTemp.add(new Vector2((int)(_rx*Math.cos(alpha)+_cx),(int)(_ry*Math.sin(alpha)+_cy)));
+             	
+             	alpha=alpha+incr;
+             }
+
+          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
          }
          else if(courant.getName().equals("line"))
          {
