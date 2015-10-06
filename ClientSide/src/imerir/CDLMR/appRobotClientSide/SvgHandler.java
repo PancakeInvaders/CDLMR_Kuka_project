@@ -7,6 +7,8 @@ import org.jdom2.input.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Iterator;
 import imerir.CDLMR.trajectoire.*;
 import imerir.CDLMR.trajectoire.Trajectoire.Type;
@@ -36,8 +38,27 @@ public class SvgHandler
       racine = document.getRootElement();
 	  System.out.println("5");
 
-	  if(Integer.parseInt(racine.getAttributeValue("width"))>297 || Integer.parseInt(racine.getAttributeValue("height"))>210)
+	  Pattern p = Pattern.compile("([0-9]+).*");
+	  Matcher m = p.matcher("900mm");
+	  System.out.println(m.matches());
+	  System.out.println(m.group(1));
+
+	  String strWidth = racine.getAttributeValue("width");
+	  Matcher mwidth = p.matcher(strWidth);
+	  System.out.println(strWidth);
+	  System.out.println(mwidth.matches());
+	  System.out.println(mwidth.group(1));
+
+	  String strHeight = racine.getAttributeValue("height");
+	  Matcher mheight = p.matcher(strHeight);
+	  System.out.println(strHeight);
+	  System.out.println(mheight.matches());
+	  System.out.println(mheight.group(1));
+
+	  if(Integer.parseInt(mwidth.group(1))>297 || Integer.parseInt(mheight.group(1))>210)
 	  {
+		  System.out.println("too big");
+
 		  throw(new SizeException("Size Out"));
 	  }
 
