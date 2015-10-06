@@ -36,7 +36,7 @@ public class SvgHandler
       racine = document.getRootElement();
 	  System.out.println("5");
 
-	  if(Integer.parseInt(racine.getAttributeValue("width"))>200 || Integer.parseInt(racine.getAttributeValue("height"))>200)
+	  if(Integer.parseInt(racine.getAttributeValue("width"))>297 || Integer.parseInt(racine.getAttributeValue("height"))>210)
 	  {
 		  throw(new SizeException("Size Out"));
 	  }

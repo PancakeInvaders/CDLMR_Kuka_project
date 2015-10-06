@@ -36,7 +36,7 @@ public class NetworkClient
 		String ipString = null;
 
 		while(ipFound == false){
-			TextInputDialog dialog = new TextInputDialog("172.30.1.176");
+			TextInputDialog dialog = new TextInputDialog("172.20.200.188");
 			dialog.setTitle("IP dialog");
 			dialog.setHeaderText("IP plz");
 			dialog.setContentText("Please enter the IP adress of the server:");

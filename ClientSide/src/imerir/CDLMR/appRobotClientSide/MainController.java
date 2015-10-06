@@ -214,7 +214,7 @@ public class MainController extends Application {
 					e,
 					"Error",
 					"An sizeException has been encountered during createSvgMaison",
-					"It seems like the image too big, remember that 200x200 is the max",
+					"It seems like the image too big, remember that 297x210 is the max",
 					false);
 		}
 
