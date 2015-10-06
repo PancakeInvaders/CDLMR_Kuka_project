@@ -330,6 +330,17 @@ public class MainController extends Application {
 						i++;
 					}
 
+					System.out.println("print svg in construction");
+
+					for(Trajectoire t : model.getSvgInConstruction().getTrajectoires()){
+						System.out.println(t.getType());
+
+						for(Vector2 v : t.getCourbe()){
+
+							v.afficher();
+						}
+
+					}
 					client.envoyer(model.getSvgInConstruction());
 
 				  //return null;

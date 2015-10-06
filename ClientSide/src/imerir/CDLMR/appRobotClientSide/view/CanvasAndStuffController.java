@@ -381,6 +381,18 @@ public class CanvasAndStuffController implements StateListener{
 		}
 		else if(getDrawingMode() == DrawingMode.CURVE){
 			//TODO
+
+			leCanvas.getGraphicsContext2D().lineTo( event.getX(), event.getY());
+
+
+			//System.out.println("x: " + event.getX() + "\ty: " + event.getY() );
+
+	    	leCanvas.getGraphicsContext2D().stroke();
+
+	    	trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - event.getY())));
+
+			mainController.notifyAddTrajectoire(trajInConstruction);
+
 		}
 		else {
 			leCanvas.getGraphicsContext2D().lineTo(event.getX(), event.getY());
