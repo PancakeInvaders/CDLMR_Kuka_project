@@ -38,7 +38,7 @@ public class SvgHandler
 	  
 	  if(Integer.parseInt(racine.getAttributeValue("width"))>200 || Integer.parseInt(racine.getAttributeValue("height"))>200)
 	  {
-		  throw(new Exception("Size Out"));
+		  throw(new SizeException("Size Out"));
 	  }
 
       tab=extractTrajectories(new ArrayList<Trajectoire>(), racine, Integer.parseInt(racine.getAttributeValue("height")));
