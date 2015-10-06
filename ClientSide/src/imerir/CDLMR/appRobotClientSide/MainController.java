@@ -310,12 +310,12 @@ public class MainController extends Application {
 		System.out.println("entered notifyHandleDrawButton");
 
 
-		Task <Void> drawTask = new Task<Void>(){
+		//Task <Void> drawTask = new Task<Void>(){
 
-			  @Override
-			  protected Void call() throws Exception {
+			//  @Override
+			  //protected Void call() throws Exception {
 
-				  System.out.println("entered drawTask's call");
+				//  System.out.println("entered drawTask's call");
 
 					int i =0;
 					for(Trajectoire t : model.getSvgInConstruction().getTrajectoires()){
@@ -332,12 +332,12 @@ public class MainController extends Application {
 
 					client.envoyer(model.getSvgInConstruction());
 
-				  return null;
-			  }
-			};
+				  //return null;
+			  //}
+			//};
 
 			//start Task
-		    new Thread(drawTask).start();
+		    //new Thread(drawTask).start();
 
 
 
