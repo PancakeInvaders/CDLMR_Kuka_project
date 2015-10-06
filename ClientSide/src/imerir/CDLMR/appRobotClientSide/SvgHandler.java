@@ -14,7 +14,7 @@ import imerir.CDLMR.trajectoire.Trajectoire.Type;
 public class SvgHandler
 {
 
-   public SvgMaison createSvgMaison(String filePath) throws Exception
+   public SvgMaison createSvgMaison(String filePath) throws IOException, SizeException, JDOMException
    {
 	  System.out.println("entered createSvgMaison");
 
@@ -35,7 +35,7 @@ public class SvgHandler
 
       racine = document.getRootElement();
 	  System.out.println("5");
-	  
+
 	  if(Integer.parseInt(racine.getAttributeValue("width"))>200 || Integer.parseInt(racine.getAttributeValue("height"))>200)
 	  {
 		  throw(new SizeException("Size Out"));
@@ -128,7 +128,7 @@ public class SvgHandler
          	arrayTemp.add(new Vector2(_cx+_r ,hauteur-_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
-         	
+
          	arrayTemp = new ArrayList<Vector2>();
 
          	arrayTemp.add(new Vector2(_cx+_r ,hauteur-_cy));
@@ -148,11 +148,11 @@ public class SvgHandler
             int _r = Integer.parseInt(courant.getAttributeValue("r"));
             double alpha=0;
             double incr=Math.PI/180;
-            
+
             while(alpha<=Math.PI*2)
             {
             	arrayTemp.add(new Vector2((int)(_r*Math.cos(alpha)+_cx),hauteur-(int)(_r*Math.sin(alpha)+_cy)));
-            	
+
             	alpha=alpha+incr;
             }
 
@@ -174,7 +174,7 @@ public class SvgHandler
          	arrayTemp.add(new Vector2(_cx+_rx ,hauteur-_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
-         	
+
          	arrayTemp = new ArrayList<Vector2>();
 
          	arrayTemp.add(new Vector2(_cx+_rx ,hauteur-_cy));
@@ -195,11 +195,11 @@ public class SvgHandler
             int _ry = Integer.parseInt(courant.getAttributeValue("ry"));
             double alpha=0;
             double incr=Math.PI/180;
-             
+
              while(alpha<=Math.PI*2)
              {
              	arrayTemp.add(new Vector2((int)(_rx*Math.cos(alpha)+_cx),hauteur-(int)(_ry*Math.sin(alpha)+_cy)));
-             	
+
              	alpha=alpha+incr;
              }
 
@@ -226,47 +226,47 @@ public class SvgHandler
         	System.out.println("found polyline");
 
           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
-          	
+
           	String _points = courant.getAttributeValue("points");
           	String[] tabLocal = _points.split(" ");
           	String[] tabLocalTemp;
-          	
+
           	int cpt=0;
-          	
+
           	while(cpt<tabLocal.length)
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
           		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
           		cpt=cpt+1;
           	}
-          	
+
 
           	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
-         	
+
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
          }
          else if(courant.getName().equals("polygon"))
          {
           	System.out.println("found polygon");
-          	
+
           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
-          	
+
           	String _points = courant.getAttributeValue("points");
           	String[] tabLocal = _points.split(" ");
           	String[] tabLocalTemp;
-          	
+
           	int cpt=0;
-          	
+
           	while(cpt<tabLocal.length)
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
           		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
           		cpt=cpt+1;
           	}
-          	
+
           	tabLocalTemp=tabLocal[0].split(",");
       		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
-          	
+
 
           	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
 
@@ -277,7 +277,7 @@ public class SvgHandler
           	System.out.println("found path");
 
           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
-          	
+
           	String _points = courant.getAttributeValue("d");
           	String[] tabLocal = _points.split(" ");
           	String[] tabLocalTemp;
@@ -285,9 +285,9 @@ public class SvgHandler
           	int yM=0;
           	int xRef=0;
           	int yRef=0;
-          	
+
           	int cpt=0;
-          	
+
           	while(cpt<tabLocal.length)
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
@@ -356,12 +356,12 @@ public class SvgHandler
           			tabLocalTemp=tabLocal[cpt].split(",");
           			int cxTemp = Integer.parseInt(tabLocalTemp[0].substring(1))+xRef;
           			int cyTemp = Integer.parseInt(tabLocalTemp[0]+yRef);
-          			
+
           			float uax = (axTemp-bxTemp)/50;
           			float uay = (ayTemp-byTemp)/50;
           			float ucx = (cxTemp-bxTemp)/50;
           			float ucy = (cyTemp-byTemp)/50;
-          			
+
           			int cptTemp=1;
           			float p1x;
           			float p1y;
@@ -369,30 +369,30 @@ public class SvgHandler
           			float p2y;
           			float fragPx;
           			float fragPy;
-          			
+
           			arrayTemp.add((new Vector2(cxTemp ,hauteur-cyTemp)));
-          			
+
           			while(cptTemp<49)
           			{
-          				
+
           				p1x=axTemp+uax*cpt;
           				p1y=ayTemp+uay*cpt;
           				p2x=axTemp+ucx*cpt;
           				p2y=byTemp+ucy*cpt;
-          				
+
           				fragPx=(p1x-p2x)/50;
           				fragPy=(p1y-p2y)/50;
-              			
+
               			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,hauteur-(int)(p1y+fragPy*cpt))));
-          				
+
           				cptTemp++;
           			}
-          			
+
           			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
-          			
+
           			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
           			arrayTemp = new ArrayList<Vector2>();
-          			
+
           			xRef=cxTemp;
           			yRef=cyTemp;
           		}
@@ -408,12 +408,12 @@ public class SvgHandler
           			tabLocalTemp=tabLocal[cpt].split(",");
           			int cxTemp = Integer.parseInt(tabLocalTemp[0].substring(1));
           			int cyTemp = Integer.parseInt(tabLocalTemp[0]);
-          			
+
           			float uax = (axTemp-bxTemp)/50;
           			float uay = (ayTemp-byTemp)/50;
           			float ucx = (cxTemp-bxTemp)/50;
           			float ucy = (cyTemp-byTemp)/50;
-          			
+
           			int cptTemp=1;
           			float p1x;
           			float p1y;
@@ -421,30 +421,30 @@ public class SvgHandler
           			float p2y;
           			float fragPx;
           			float fragPy;
-          			
+
           			arrayTemp.add((new Vector2(cxTemp ,hauteur-cyTemp)));
-          			
+
           			while(cptTemp<49)
           			{
-          				
+
           				p1x=axTemp+uax*cpt;
           				p1y=ayTemp+uay*cpt;
           				p2x=axTemp+ucx*cpt;
           				p2y=byTemp+ucy*cpt;
-          				
+
           				fragPx=(p1x-p2x)/50;
           				fragPy=(p1y-p2y)/50;
-              			
+
               			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,hauteur-(int)(p1y+fragPy*cpt))));
-          				
+
           				cptTemp++;
           			}
-          			
+
           			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
-          			
+
           			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
           			arrayTemp = new ArrayList<Vector2>();
-          			
+
           			xRef=cxTemp;
           			yRef=cyTemp;
           		}
@@ -454,10 +454,10 @@ public class SvgHandler
           		}
           		cpt=cpt+1;
           	}
-          	
+
 
           	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
-          	
+
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
          }
       }

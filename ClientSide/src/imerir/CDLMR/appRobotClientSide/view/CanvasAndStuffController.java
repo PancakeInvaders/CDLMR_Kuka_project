@@ -161,6 +161,13 @@ public class CanvasAndStuffController implements StateListener{
 
 		leCanvas.getGraphicsContext2D().clearRect(0, 0, leCanvas.getWidth(), leCanvas.getHeight());
 
+		leCanvas.getGraphicsContext2D().setStroke(Color.BLACK);
+		leCanvas.getGraphicsContext2D().strokeRect(
+                0,              //x of the upper left corner
+                0,              //y of the upper left corner
+                leCanvas.getWidth(),    //width of the rectangle
+                leCanvas.getHeight());  //height of the rectangle
+
 		mainController.notifyClearSvgInConstruction();
 
 	}

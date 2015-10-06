@@ -213,8 +213,8 @@ public class MainController extends Application {
 			notifyHandleException(
 					e,
 					"Error",
-					"An size error has been encountered during createSvgMaison",
-					"It seems like the ",
+					"An sizeException has been encountered during createSvgMaison",
+					"It seems like the image too big, remember that 200x200 is the max",
 					false);
 		}
 
