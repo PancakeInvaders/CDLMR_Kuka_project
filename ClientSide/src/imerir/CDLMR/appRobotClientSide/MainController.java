@@ -16,6 +16,7 @@ import imerir.CDLMR.trajectoire.SvgMaison;
 import imerir.CDLMR.trajectoire.Trajectoire;
 import imerir.CDLMR.trajectoire.Vector2;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 //import javafx.geometry.Rectangle2D;
@@ -147,24 +148,33 @@ public class MainController extends Application {
 
     public void notifyHandleImpressionButton(){
 
-    	File file = ihmModel.getCurrentlySelectedFile();
+    	System.out.println("entered notifyHandleImpressionButton");
+    	//Task <Void> printTask = new Task<Void>(){
 
-    	if(file == null){
+    		//@Override
+			//protected Void call() throws Exception {
 
-    		System.out.println("The file has not been set!");
+    			//System.out.println("entered printTask's call");
 
-    	}
-    	else {
+		    	File file = ihmModel.getCurrentlySelectedFile();
 
-    		System.out.println("impression filePath: " + file.getAbsolutePath());
+		    	if(file == null){
 
+		    		System.out.println("The file has not been set!");
 
-			notifyEnvoyerSvgRobot(file.getAbsolutePath());
+		    	}
+		    	else {
 
+		    		System.out.println("impression filePath: " + file.getAbsolutePath());
+					notifyEnvoyerSvgRobot(file.getAbsolutePath());
 
+		    	}
+		    	//return null;
+			//}
+    	//};
 
-    	}
-
+    	//start Task
+    	//new Thread(printTask).start();
     }
 
 	public void notifyEnvoyerSvgRobot(String cheminFichier)
@@ -222,48 +232,72 @@ public class MainController extends Application {
 
 	public void notifyHandleException(Exception e, String title, String headerText, String contentText, boolean exit){
 
-					Alert alert = new Alert(AlertType.ERROR);
-
-					System.out.println(headerText);
-					System.out.println(contentText);
 					e.printStackTrace();
 
-					alert.setTitle(title);
-					alert.setHeaderText(headerText);
-					alert.setContentText(contentText);
+					Platform.runLater(new Runnable() {
 
-					// Create expandable Exception.
-					StringWriter sw = new StringWriter();
-					PrintWriter pw = new PrintWriter(sw);
-					e.printStackTrace(pw);
-					String exceptionText = sw.toString();
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
 
-					Label label = new Label("The exception stacktrace was:");
 
-					TextArea textArea = new TextArea(exceptionText);
-					textArea.setEditable(false);
-					textArea.setWrapText(true);
 
-					textArea.setMaxWidth(Double.MAX_VALUE);
-					textArea.setMaxHeight(Double.MAX_VALUE);
-					GridPane.setVgrow(textArea, Priority.ALWAYS);
-					GridPane.setHgrow(textArea, Priority.ALWAYS);
+							Alert alert = null;
+							try{
 
-					GridPane expContent = new GridPane();
-					expContent.setMaxWidth(Double.MAX_VALUE);
-					expContent.add(label, 0, 0);
-					expContent.add(textArea, 0, 1);
+								alert = new Alert(AlertType.ERROR);
+							}
+							catch(Exception ex){
 
-					// Set expandable Exception into the dialog pane.
-					alert.getDialogPane().setExpandableContent(expContent);
+								ex.printStackTrace();
+								return;
 
-					alert.showAndWait();
+							}
+							System.out.println(headerText);
+							System.out.println(contentText);
+							e.printStackTrace();
 
-					if(exit == true){
+							alert.setTitle(title);
+							alert.setHeaderText(headerText);
+							alert.setContentText(contentText);
 
-						System.exit(1);
-					}
+							// Create expandable Exception.
+							StringWriter sw = new StringWriter();
+							PrintWriter pw = new PrintWriter(sw);
+							e.printStackTrace(pw);
+							String exceptionText = sw.toString();
 
+							Label label = new Label("The exception stacktrace was:");
+
+							TextArea textArea = new TextArea(exceptionText);
+							textArea.setEditable(false);
+							textArea.setWrapText(true);
+
+							textArea.setMaxWidth(Double.MAX_VALUE);
+							textArea.setMaxHeight(Double.MAX_VALUE);
+							GridPane.setVgrow(textArea, Priority.ALWAYS);
+							GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+							GridPane expContent = new GridPane();
+							expContent.setMaxWidth(Double.MAX_VALUE);
+							expContent.add(label, 0, 0);
+							expContent.add(textArea, 0, 1);
+
+							// Set expandable Exception into the dialog pane.
+							alert.getDialogPane().setExpandableContent(expContent);
+							try {
+								alert.showAndWait();
+							}
+							catch(IllegalStateException e2){
+
+								e2.printStackTrace();
+							}
+							if(exit == true){
+
+								System.exit(1);
+							}
+						}
+					});
 	}
 
 	public void notifyAddTrajectoire(Trajectoire t){

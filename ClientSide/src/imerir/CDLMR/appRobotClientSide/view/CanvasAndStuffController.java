@@ -199,6 +199,8 @@ public class CanvasAndStuffController implements StateListener{
 	@FXML
 	private void handleDrawButton(){
 
+
+
 	    mainController.notifyHandleDrawButton();
 
 
