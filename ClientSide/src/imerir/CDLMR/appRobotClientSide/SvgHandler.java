@@ -36,6 +36,7 @@ public class SvgHandler
       racine = document.getRootElement();
 	  System.out.println("5");
 	  
+	  System.out.println(racine);
 	  System.out.println(racine.getName().equals("width"));
 	  System.out.println(racine.getName().equals("height"));
 
