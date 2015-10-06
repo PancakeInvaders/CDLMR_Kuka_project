@@ -2,9 +2,9 @@
  <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
  <g>
   <title>Calque 1</title>
-  <line id="svg_2" y2="120" x2="150" y1="200" x1="100" stroke="#000000" fill="none"/>
-  <line id="svg_3" y2="200" x2="200" y1="120" x1="150" stroke="#000000" fill="none"/>
-  <line id="svg_4" y2="200" x2="125" y1="200" x1="100"  stroke="#000000" fill="none"/>
+  <line id="svg_2" y2="120" x2="150" y1="200" x1="100" stroke="#ff0000" fill="none"/>
+  <line id="svg_3" y2="200" x2="200" y1="120" x1="150" stroke="#ff0000" fill="none"/>
+  <line id="svg_4" y2="200" x2="125" y1="200" x1="100"  stroke="#ff0000" fill="none"/>
   <line id="svg_5" y2="190" x2="120" y1="200" x1="125"  stroke="#000000" fill="none"/>
   <line id="svg_6" y2="140" x2="150" y1="190" x1="120" stroke="#000000" fill="none"/>
   <line id="svg_7" y2="190" x2="180" y1="140" x1="150" stroke="#000000" fill="none"/>
