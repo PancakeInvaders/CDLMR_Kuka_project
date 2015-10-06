@@ -422,7 +422,7 @@ public class SvgHandler
           			float fragPx;
           			float fragPy;
           			
-          			arrayTemp.add((new Vector2(cxTemp ,cyTemp)));
+          			arrayTemp.add((new Vector2(cxTemp ,hauteur-cyTemp)));
           			
           			while(cptTemp<49)
           			{
@@ -435,7 +435,7 @@ public class SvgHandler
           				fragPx=(p1x-p2x)/50;
           				fragPy=(p1y-p2y)/50;
               			
-              			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,(int)(p1y+fragPy*cpt))));
+              			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,hauteur-(int)(p1y+fragPy*cpt))));
           				
           				cptTemp++;
           			}
