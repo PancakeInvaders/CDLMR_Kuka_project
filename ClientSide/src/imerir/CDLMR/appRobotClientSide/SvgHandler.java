@@ -14,7 +14,7 @@ import imerir.CDLMR.trajectoire.Trajectoire.Type;
 public class SvgHandler
 {
 
-   public SvgMaison createSvgMaison(String filePath) throws JDOMException, IOException
+   public SvgMaison createSvgMaison(String filePath) throws Exception
    {
 	  System.out.println("entered createSvgMaison");
 
@@ -36,19 +36,19 @@ public class SvgHandler
       racine = document.getRootElement();
 	  System.out.println("5");
 	  
-	  System.out.println(racine.getAttributeValue("width"));
-	  System.out.println(racine.getAttributeValue("height"));
-	  System.out.println(racine.getName().equals("width"));
-	  System.out.println(racine.getName().equals("height"));
+	  if(Integer.parseInt(racine.getAttributeValue("width"))>200 || Integer.parseInt(racine.getAttributeValue("height"))>200)
+	  {
+		  throw(new Exception("Size Out"));
+	  }
 
-      tab=extractTrajectories(new ArrayList<Trajectoire>(), racine);
+      tab=extractTrajectories(new ArrayList<Trajectoire>(), racine, Integer.parseInt(racine.getAttributeValue("height")));
 
       svgMaison = new SvgMaison(tab);
 
       return svgMaison;
    }
 
-   public static void main(String[] args)
+   /*public static void main(String[] args)
    {
 	   SvgHandler jdom = new SvgHandler();
 	   try
@@ -73,9 +73,9 @@ public class SvgHandler
 	   }
 	   catch (JDOMException e) {e.printStackTrace();}
 	   catch (IOException e) {e.printStackTrace();}
-   }
+   }*/
 
-   private ArrayList<Trajectoire> extractTrajectories(ArrayList<Trajectoire> trajectories, Element racineActuel)
+   private ArrayList<Trajectoire> extractTrajectories(ArrayList<Trajectoire> trajectories, Element racineActuel, int hauteur)
    {
 	  System.out.println("entered extractTrajectories");
 
@@ -90,7 +90,7 @@ public class SvgHandler
          if(courant.getName().equals("g"))
          {
         	 System.out.println("about to enter extractTrajectories of the G");
-        	 trajectories = extractTrajectories(trajectories, courant);
+        	 trajectories = extractTrajectories(trajectories, courant, hauteur);
          }
          else if(courant.getName().equals("rect"))
          {
@@ -105,11 +105,11 @@ public class SvgHandler
             int _width = Integer.parseInt(courant.getAttributeValue("width"));
             int _height = Integer.parseInt(courant.getAttributeValue("height"));
 
-         	arrayTemp.add(new Vector2(_x ,_y));
-         	arrayTemp.add(new Vector2(_x + _width,_y));
-         	arrayTemp.add(new Vector2(_x + _width,_y+_height));
-         	arrayTemp.add(new Vector2(_x, _y+_height));
-         	arrayTemp.add(new Vector2(_x, _y));
+         	arrayTemp.add(new Vector2(_x ,hauteur-_y));
+         	arrayTemp.add(new Vector2(_x + _width,hauteur-_y));
+         	arrayTemp.add(new Vector2(_x + _width,hauteur-_y+_height));
+         	arrayTemp.add(new Vector2(_x, hauteur-_y+_height));
+         	arrayTemp.add(new Vector2(_x, hauteur-_y));
 
          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
          }
@@ -123,17 +123,17 @@ public class SvgHandler
             int _cy = Integer.parseInt(courant.getAttributeValue("cy"));
             int _r = Integer.parseInt(courant.getAttributeValue("r"));
 
-         	arrayTemp.add(new Vector2(_cx-_r ,_cy));
-         	arrayTemp.add(new Vector2(_cx,_cy+_r));
-         	arrayTemp.add(new Vector2(_cx+_r ,_cy));
+         	arrayTemp.add(new Vector2(_cx-_r ,hauteur-_cy));
+         	arrayTemp.add(new Vector2(_cx,hauteur-_cy+_r));
+         	arrayTemp.add(new Vector2(_cx+_r ,hauteur-_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
          	
          	arrayTemp = new ArrayList<Vector2>();
 
-         	arrayTemp.add(new Vector2(_cx+_r ,_cy));
-         	arrayTemp.add(new Vector2(_cx,_cy-_r));
-         	arrayTemp.add(new Vector2(_cx-_r ,_cy));
+         	arrayTemp.add(new Vector2(_cx+_r ,hauteur-_cy));
+         	arrayTemp.add(new Vector2(_cx,hauteur-_cy-_r));
+         	arrayTemp.add(new Vector2(_cx-_r ,hauteur-_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
          }*/
@@ -151,7 +151,7 @@ public class SvgHandler
             
             while(alpha<=Math.PI*2)
             {
-            	arrayTemp.add(new Vector2((int)(_r*Math.cos(alpha)+_cx),(int)(_r*Math.sin(alpha)+_cy)));
+            	arrayTemp.add(new Vector2((int)(_r*Math.cos(alpha)+_cx),hauteur-(int)(_r*Math.sin(alpha)+_cy)));
             	
             	alpha=alpha+incr;
             }
@@ -169,17 +169,17 @@ public class SvgHandler
             int _rx = Integer.parseInt(courant.getAttributeValue("rx"));
             int _ry = Integer.parseInt(courant.getAttributeValue("ry"));
 
-         	arrayTemp.add(new Vector2(_cx-_rx ,_cy));
-         	arrayTemp.add(new Vector2(_cx,_cy+_ry));
-         	arrayTemp.add(new Vector2(_cx+_rx ,_cy));
+         	arrayTemp.add(new Vector2(_cx-_rx ,hauteur-_cy));
+         	arrayTemp.add(new Vector2(_cx,hauteur-_cy+_ry));
+         	arrayTemp.add(new Vector2(_cx+_rx ,hauteur-_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
          	
          	arrayTemp = new ArrayList<Vector2>();
 
-         	arrayTemp.add(new Vector2(_cx+_rx ,_cy));
-         	arrayTemp.add(new Vector2(_cx,_cy-_ry));
-         	arrayTemp.add(new Vector2(_cx-_rx ,_cy));
+         	arrayTemp.add(new Vector2(_cx+_rx ,hauteur-_cy));
+         	arrayTemp.add(new Vector2(_cx,hauteur-_cy-_ry));
+         	arrayTemp.add(new Vector2(_cx-_rx ,hauteur-_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
          }*/
@@ -198,7 +198,7 @@ public class SvgHandler
              
              while(alpha<=Math.PI*2)
              {
-             	arrayTemp.add(new Vector2((int)(_rx*Math.cos(alpha)+_cx),(int)(_ry*Math.sin(alpha)+_cy)));
+             	arrayTemp.add(new Vector2((int)(_rx*Math.cos(alpha)+_cx),hauteur-(int)(_ry*Math.sin(alpha)+_cy)));
              	
              	alpha=alpha+incr;
              }
@@ -216,8 +216,8 @@ public class SvgHandler
             int _x2 = Integer.parseInt(courant.getAttributeValue("x2"));
             int _y2 = Integer.parseInt(courant.getAttributeValue("y2"));
 
-         	arrayTemp.add(new Vector2(_x1 ,_y1));
-         	arrayTemp.add(new Vector2(_x2,_y2));
+         	arrayTemp.add(new Vector2(_x1 ,hauteur-_y1));
+         	arrayTemp.add(new Vector2(_x2,hauteur-_y2));
 
          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
          }
@@ -236,7 +236,7 @@ public class SvgHandler
           	while(cpt<tabLocal.length)
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
-          		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,Integer.parseInt(tabLocalTemp[1])));
+          		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
           		cpt=cpt+1;
           	}
           	
@@ -260,12 +260,12 @@ public class SvgHandler
           	while(cpt<tabLocal.length)
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
-          		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,Integer.parseInt(tabLocalTemp[1])));
+          		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
           		cpt=cpt+1;
           	}
           	
           	tabLocalTemp=tabLocal[0].split(",");
-      		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,Integer.parseInt(tabLocalTemp[1])));
+      		arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0]) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
           	
 
           	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
@@ -303,46 +303,46 @@ public class SvgHandler
           		}
           		else if(tabLocalTemp[0].charAt(0)=='L')
           		{
-          			arrayTemp.add(new Vector2(xRef ,yRef));
-          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,Integer.parseInt(tabLocalTemp[1])));
+          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
           			xRef=Integer.parseInt(xRef+tabLocalTemp[0].substring(1));
           			yRef=Integer.parseInt(yRef+tabLocalTemp[1]);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='l')
           		{
-          			arrayTemp.add(new Vector2(xRef ,yRef));
-          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1))+xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));
+          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1))+xRef ,hauteur-Integer.parseInt(tabLocalTemp[1])+yRef));
           			xRef=Integer.parseInt(xRef+tabLocalTemp[0].substring(1));
           			yRef=Integer.parseInt(yRef+tabLocalTemp[1]);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='H')
           		{
-          			arrayTemp.add(new Vector2(xRef ,yRef));
-          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,yRef));
+          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,hauteur-yRef));
           			xRef=Integer.parseInt(tabLocalTemp[0].substring(1));
           		}
           		else if(tabLocalTemp[0].charAt(0)=='h')
           		{
-          			arrayTemp.add(new Vector2(xRef ,yRef));
-          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1))+xRef ,yRef));
+          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1))+xRef ,hauteur-yRef));
           			xRef=Integer.parseInt(tabLocalTemp[0].substring(1)+xRef);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='V')
           		{
-          			arrayTemp.add(new Vector2(xRef ,yRef));
-          			arrayTemp.add(new Vector2(xRef ,Integer.parseInt(tabLocalTemp[1])));
+          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
+          			arrayTemp.add(new Vector2(xRef ,hauteur-Integer.parseInt(tabLocalTemp[1])));
           			yRef=Integer.parseInt(tabLocalTemp[1]);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='v')
           		{
-          			arrayTemp.add(new Vector2(xRef ,yRef));
-          			arrayTemp.add(new Vector2(xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));
+          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
+          			arrayTemp.add(new Vector2(xRef ,hauteur-Integer.parseInt(tabLocalTemp[1])+yRef));
           			yRef=Integer.parseInt(tabLocalTemp[1])+yRef;
           		}
           		else if(tabLocalTemp[0].charAt(0)=='Z' || tabLocalTemp[0].charAt(0)=='z')
           		{
-          			arrayTemp.add(new Vector2(xRef ,yRef));
-          			arrayTemp.add(new Vector2(yM ,xM));
+          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
+          			arrayTemp.add(new Vector2(yM ,hauteur-xM));
           		}
           		else if(tabLocalTemp[0].charAt(0)=='q')
           		{
@@ -370,7 +370,7 @@ public class SvgHandler
           			float fragPx;
           			float fragPy;
           			
-          			arrayTemp.add((new Vector2(cxTemp ,cyTemp)));
+          			arrayTemp.add((new Vector2(cxTemp ,hauteur-cyTemp)));
           			
           			while(cptTemp<49)
           			{
@@ -383,12 +383,12 @@ public class SvgHandler
           				fragPx=(p1x-p2x)/50;
           				fragPy=(p1y-p2y)/50;
               			
-              			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,(int)(p1y+fragPy*cpt))));
+              			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,hauteur-(int)(p1y+fragPy*cpt))));
           				
           				cptTemp++;
           			}
           			
-          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,Integer.parseInt(tabLocalTemp[1])));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
           			
           			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
           			arrayTemp = new ArrayList<Vector2>();
@@ -440,7 +440,7 @@ public class SvgHandler
           				cptTemp++;
           			}
           			
-          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,Integer.parseInt(tabLocalTemp[1])));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0].substring(1)) ,hauteur-Integer.parseInt(tabLocalTemp[1])));
           			
           			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
           			arrayTemp = new ArrayList<Vector2>();
@@ -450,7 +450,7 @@ public class SvgHandler
           		}
           		else
           		{
-          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0])+xRef ,Integer.parseInt(tabLocalTemp[1])+yRef));
+          			arrayTemp.add(new Vector2(Integer.parseInt(tabLocalTemp[0])+xRef ,hauteur-Integer.parseInt(tabLocalTemp[1])+yRef));
           		}
           		cpt=cpt+1;
           	}
