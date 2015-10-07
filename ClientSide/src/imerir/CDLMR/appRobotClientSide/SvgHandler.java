@@ -1,5 +1,7 @@
 package imerir.CDLMR.appRobotClientSide;
 
+//package imerir.CDLMR.appRobotClientSide;
+
 import java.io.*;
 
 import org.jdom2.*;
