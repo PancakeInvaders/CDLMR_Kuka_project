@@ -218,6 +218,11 @@ public class CanvasAndStuffController implements StateListener{
 
 	}
 
+
+	/**
+	 *
+	 * Lors d'un clic sur le bouton de choix de fichier, montrer un filechooser, et stocker le fichier choisi dans le modèle
+	 */
 	 @FXML
 	private void handleChooseFileButton() {
 	        System.out.println("button activated");
@@ -235,6 +240,10 @@ public class CanvasAndStuffController implements StateListener{
 
 	    }
 
+	/**
+	 *
+	 * Lors d'un clic sur le bouton d'impression, deleguer le traitement au controller principal
+	 */
 	@FXML
 	private void handleImpressionButton(){
 
@@ -242,19 +251,25 @@ public class CanvasAndStuffController implements StateListener{
 
 	}
 
+
+	/**
+	 *
+	 * Lors d'un clic sur le bouton de dessin, deleguer le traitement au controller principal
+	 */
 	@FXML
 	private void handleDrawButton(){
 
-
-
 	    mainController.notifyHandleDrawButton();
-
 
 	}
 
+	/**
+	 *
+	 * Fonction d'initialisation de la vue
+	 */
 	public void initialize() {
-		//drawShapes();
 
+		// on dessine un carré autour du canvas pour le delimiter
 		leCanvas.getGraphicsContext2D().setStroke(Color.BLACK);
 		leCanvas.getGraphicsContext2D().strokeRect(
                 0,              //x of the upper left corner
@@ -262,8 +277,11 @@ public class CanvasAndStuffController implements StateListener{
                 leCanvas.getWidth(),    //width of the rectangle
                 leCanvas.getHeight());  //height of the rectangle
 
+		// le mode de dessin par default est le mode ligne
 		drawingMode = DrawingMode.LINE;
 
+		// les boutons de dessin de cercle, de ligne brisée, de polygone, d'ellipse, et de courbe de bezier ne sont pas encore implémentés, mais ce sont des axes de développement
+		// ils sont donc disable
 		circleButton.setDisable(true);
 		polyLineButton.setDisable(true);
 		polygonButton.setDisable(true);
@@ -281,13 +299,21 @@ public class CanvasAndStuffController implements StateListener{
 		System.out.println("Mode " + drawingMode);
 	}
 
+
+	/**
+	 * Fonction qui traite l'évènement de mouse pressed sur le canvas
+	 *
+	 * @param event
+	 */
 	@FXML
-	void handleMousePressed(MouseEvent event){
+	private void handleMousePressed(MouseEvent event){
 
 		System.out.println("entered handleMousePressed");
 
 		if(getDrawingMode() == DrawingMode.LINE){
-			//trajInConstruction = new Trajectoire(Type.LINE, new ArrayList<Vector2>() );
+			// si le mode de dessin actuel est le mode LINE, alors on commence a construire la trajectoire associée à la ligne
+			// et on dessine sur le canvas de la mnière appropriée
+
 			trajInConstruction = new Trajectoire(Type.LINE, new ArrayList<Vector2>() );
 
 	    	leCanvas.getGraphicsContext2D().beginPath();
@@ -298,7 +324,10 @@ public class CanvasAndStuffController implements StateListener{
 	    	leCanvas.getGraphicsContext2D().stroke();
 		}
 		else if(getDrawingMode() == DrawingMode.RECT){
-			//trajInConstruction = new Trajectoire(Type.LINE, new ArrayList<Vector2>() );
+			// si le mode de dessin actuel est le mode RECT, alors on commence a construire la trajectoire associée au rectangle
+			// et on dessine sur le canvas de la mnière appropriée
+
+
 			trajInConstruction = new Trajectoire(Type.LINE, new ArrayList<Vector2>() );
 
 	    	leCanvas.getGraphicsContext2D().beginPath();
@@ -311,9 +340,8 @@ public class CanvasAndStuffController implements StateListener{
 	    	leCanvas.getGraphicsContext2D().stroke();
 		}
 		else if(getDrawingMode() == DrawingMode.CURVE){
-
-    		System.out.println("new trajectory created");
-
+			// si le mode de dessin actuel est le mode CURVE, alors on commence a construire la trajectoire associée à la courbe
+			// et on commence le dessin sur le canvas de la manière appropriée
 
 			trajInConstruction = new Trajectoire(Type.LINE, new ArrayList<Vector2>() );
 
@@ -338,15 +366,21 @@ public class CanvasAndStuffController implements StateListener{
 
 	}
 
+	/**
+	 * Fonction traitant l'évènement de mouse drag sur le canvas
+	 * @param event
+	 */
 	@FXML
-	void handleMouseDragged(MouseEvent event){
+	private void handleMouseDragged(MouseEvent event){
 		if(getDrawingMode() == DrawingMode.LINE){
-
+			// il n'y a rien a faire si le mode est LINE
 		}
 		else if(getDrawingMode() == DrawingMode.RECT){
-
+			// il n'y a riena faire si le mode est RECT
 		}
 		else if(getDrawingMode() == DrawingMode.CURVE){
+
+			// si le mode est curve alors on enregistre chaque point par lequel on passe (un evènement est généré pour chaque point)
 
 	    	if(trajInConstruction.getCourbe().size() >= 300){
 	    		System.out.println("new trajectory created");
@@ -362,12 +396,11 @@ public class CanvasAndStuffController implements StateListener{
 	    	leCanvas.getGraphicsContext2D().stroke();
 
 	    	trajInConstruction.getCourbe().add(new Vector2((int)event.getX(), (int)(leCanvas.getHeight() - event.getY())));
-	    	//nbPointCurve++;
-	    	//System.out.println("nbPointCurve: " + nbPointCurve);
-
 
 		}
+		/*
 		else{
+
 			//leCanvas.getGraphicsContext2D().lineTo(event.getX(), event.getY());
 			leCanvas.getGraphicsContext2D().lineTo( event.getX(), event.getY());
 
@@ -375,10 +408,16 @@ public class CanvasAndStuffController implements StateListener{
 
 	    	leCanvas.getGraphicsContext2D().stroke();
 		}
+		*/
 	}
 
+	/**
+	 *
+	 * Fonction traitant l'évènement de mouse release sur le canvas
+	 * @param event
+	 */
 	@FXML
-	void handleMouseRelease(MouseEvent event){
+	private void handleMouseRelease(MouseEvent event){
 
 		System.out.println("entered handleMouseRelease");
 
