@@ -37,7 +37,7 @@
      id="layer1">
 
 
-     <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+     <circle cx="100" cy="100" r="40" stroke="black" stroke-width="3" fill="red" />
   </g>
 </svg>
 
