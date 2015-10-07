@@ -17,7 +17,7 @@ import imerir.CDLMR.trajectoire.Trajectoire.Type;
 
 public class SvgHandler
 {
-
+	// Cette fonction utilise la librairie JDOM afin de pouvoir lire le fichier XML et test la taille du fichier avant de lancer le traitement de son contenu.
    public SvgMaison createSvgMaison(String filePath) throws IOException, SizeException, JDOMException
    {
 	  System.out.println("entered createSvgMaison");
@@ -27,7 +27,7 @@ public class SvgHandler
 	  Element racine;
 
 	  System.out.println("1");
-
+	  //Lecture du document XML
 	  org.jdom2.Document document = null;
 	  System.out.println("2");
 
@@ -40,6 +40,7 @@ public class SvgHandler
       racine = document.getRootElement();
 	  System.out.println("5");
 
+	  // Test de la taille du fichier
 	  Pattern p = Pattern.compile("([0-9]+).*");
 	  Matcher m = p.matcher("900mm");
 	  System.out.println(m.matches());
@@ -47,15 +48,15 @@ public class SvgHandler
 
 	  String strWidth = racine.getAttributeValue("width");
 	  Matcher mwidth = p.matcher(strWidth);
-	  System.out.println("strwidth: " + strWidth);
-	  System.out.println("matches: " + mwidth.matches());
-	  System.out.println("mwidth.group(1): " + mwidth.group(1));
+	  System.out.println(strWidth);
+	  System.out.println(mwidth.matches());
+	  System.out.println(mwidth.group(1));
 
 	  String strHeight = racine.getAttributeValue("height");
 	  Matcher mheight = p.matcher(strHeight);
-	  System.out.println("strHeight: " + strHeight);
-	  System.out.println("matches: " + mheight.matches());
-	  System.out.println("mheight.group(1): " + mheight.group(1));
+	  System.out.println(strHeight);
+	  System.out.println(mheight.matches());
+	  System.out.println(mheight.group(1));
 
 	  if((int)Double.parseDouble(mwidth.group(1))>297 || (int)Double.parseDouble(mheight.group(1))>210)
 	  {
@@ -63,7 +64,8 @@ public class SvgHandler
 
 		  throw(new SizeException("Size Out"));
 	  }
-
+	  
+	  // Lancement de la généraration du code maison compréhenssible par le robot
       tab=extractTrajectories(new ArrayList<Trajectoire>(), racine, (int)Double.parseDouble(racine.getAttributeValue("height")));
 
       svgMaison = new SvgMaison(tab);
@@ -98,23 +100,28 @@ public class SvgHandler
 	   catch (IOException e) {e.printStackTrace();}
    }*/
 
+   // Fonction "parser" de svg
    private ArrayList<Trajectoire> extractTrajectories(ArrayList<Trajectoire> trajectories, Element racineActuel, int hauteur)
    {
+	  // La fonction récupère et traite chacunes des balises contenu dans la balise svg
 	  System.out.println("entered extractTrajectories");
 
       List<Element> listElements = racineActuel.getChildren();
 
+      // Pour chacune des balises contenu dans la balise svg
       Iterator<Element> i = listElements.iterator();
       while(i.hasNext())
       {
          Element courant = (Element)i.next();
          courant.getChildren();
-
+         
+         // Si le svg contient une balise g on va regarder ce que cette balise g contient
          if(courant.getName().equals("g"))
          {
         	 System.out.println("about to enter extractTrajectories of the G");
         	 trajectories = extractTrajectories(trajectories, courant, hauteur);
          }
+         // La balise rect indique le dessin d'un rectangle
          else if(courant.getName().equals("rect"))
          {
 
@@ -123,17 +130,21 @@ public class SvgHandler
 
         	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
 
+        	// On récupère les information contenu dans le fichier
         	int _x = (int)Double.parseDouble(courant.getAttributeValue("x"));
             int _y = (int)Double.parseDouble(courant.getAttributeValue("y"));
             int _width = (int)Double.parseDouble(courant.getAttributeValue("width"));
             int _height = (int)Double.parseDouble(courant.getAttributeValue("height"));
-
+            
+            // On calcule les quatres points et on s'y rend dans le bon ordre.
          	arrayTemp.add(new Vector2(_x ,hauteur-_y));
          	arrayTemp.add(new Vector2(_x + _width,hauteur-_y));
-         	arrayTemp.add(new Vector2(_x + _width,hauteur-(_y+_height)));
-         	arrayTemp.add(new Vector2(_x, hauteur-(_y+_height)));
+         	arrayTemp.add(new Vector2(_x + _width,hauteur-_y+_height));
+         	arrayTemp.add(new Vector2(_x, hauteur-_y+_height));
+         	// On retourne au premier point afin de fermer la figure.
          	arrayTemp.add(new Vector2(_x, hauteur-_y));
 
+         	// Envois de la trajectoire au Robot
          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
          }
          /*else if(courant.getName().equals("circle"))
@@ -147,7 +158,7 @@ public class SvgHandler
             int _r = (int)Double.parseDouble(courant.getAttributeValue("r"));
 
          	arrayTemp.add(new Vector2(_cx-_r ,hauteur-_cy));
-         	arrayTemp.add(new Vector2(_cx,hauteur-(_cy+_r)));
+         	arrayTemp.add(new Vector2(_cx,hauteur-_cy+_r));
          	arrayTemp.add(new Vector2(_cx+_r ,hauteur-_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
@@ -155,30 +166,34 @@ public class SvgHandler
          	arrayTemp = new ArrayList<Vector2>();
 
          	arrayTemp.add(new Vector2(_cx+_r ,hauteur-_cy));
-         	arrayTemp.add(new Vector2(_cx,hauteur-(_cy-_r)));
+         	arrayTemp.add(new Vector2(_cx,hauteur-_cy-_r));
          	arrayTemp.add(new Vector2(_cx-_r ,hauteur-_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
          }*/
+         // La balise circle indique le dessin d'un cercle
          else if(courant.getName().equals("circle"))
          {
           	System.out.println("found a circle");
 
           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
-
+          	
+          	// On récupère les information contenu dans le fichier
         	int _cx = (int)Double.parseDouble(courant.getAttributeValue("cx"));
             int _cy = (int)Double.parseDouble(courant.getAttributeValue("cy"));
             int _r = (int)Double.parseDouble(courant.getAttributeValue("r"));
             double alpha=0;
             double incr=Math.PI/180;
-
+            
+            // On calcule 360 points afin d'obtenir la forme du cercle.
             while(alpha<=Math.PI*2)
             {
-            	arrayTemp.add(new Vector2((int)(_r*Math.cos(alpha)+_cx),hauteur-((int)(_r*Math.sin(alpha)+_cy))));
+            	arrayTemp.add(new Vector2((int)(_r*Math.cos(alpha)+_cx),hauteur-(int)(_r*Math.sin(alpha)+_cy)));
 
             	alpha=alpha+incr;
             }
 
+            // Envois de la trajectoire au Robot
          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
          }
          /*else if(courant.getName().equals("ellipse"))
@@ -193,7 +208,7 @@ public class SvgHandler
             int _ry = (int)Double.parseDouble(courant.getAttributeValue("ry"));
 
          	arrayTemp.add(new Vector2(_cx-_rx ,hauteur-_cy));
-         	arrayTemp.add(new Vector2(_cx,hauteur-(_cy+_ry)));
+         	arrayTemp.add(new Vector2(_cx,hauteur-_cy+_ry));
          	arrayTemp.add(new Vector2(_cx+_rx ,hauteur-_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
@@ -201,17 +216,19 @@ public class SvgHandler
          	arrayTemp = new ArrayList<Vector2>();
 
          	arrayTemp.add(new Vector2(_cx+_rx ,hauteur-_cy));
-         	arrayTemp.add(new Vector2(_cx,hauteur-(_cy-_ry)));
+         	arrayTemp.add(new Vector2(_cx,hauteur-_cy-_ry));
          	arrayTemp.add(new Vector2(_cx-_rx ,hauteur-_cy));
 
          	trajectories.add(new Trajectoire(Type.CIRCLE, arrayTemp));
          }*/
+         // La balise ellipse indique le dessin d'une ellipse
          else if(courant.getName().equals("ellipse"))
          {
         	 System.out.println("found a ellipse");
 
            	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
-
+           	
+          	// On récupère les information contenu dans le fichier
            	int _cx = (int)Double.parseDouble(courant.getAttributeValue("cx"));
             int _cy = (int)Double.parseDouble(courant.getAttributeValue("cy"));
             int _rx = (int)Double.parseDouble(courant.getAttributeValue("rx"));
@@ -219,78 +236,90 @@ public class SvgHandler
             double alpha=0;
             double incr=Math.PI/180;
 
-             while(alpha<=Math.PI*2)
-             {
-             	arrayTemp.add(new Vector2((int)(_rx*Math.cos(alpha)+_cx),hauteur-((int)(_ry*Math.sin(alpha)+_cy))));
+            // On calcule 360 points afin d'obtenir la forme de l'ellipse.
+            while(alpha<=Math.PI*2)
+            {
+            	arrayTemp.add(new Vector2((int)(_rx*Math.cos(alpha)+_cx),hauteur-(int)(_ry*Math.sin(alpha)+_cy)));
 
-             	alpha=alpha+incr;
-             }
+            	alpha=alpha+incr;
+            }
 
+            // Envois de la trajectoire au Robot
           	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
          }
+         // La balise line indique le dessin d'une ligne
          else if(courant.getName().equals("line"))
          {
         	System.out.println("found a line");
 
           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
 
+          	// On récupère les information contenu dans le fichier
         	int _x1 = (int)Double.parseDouble(courant.getAttributeValue("x1"));
             int _y1 = (int)Double.parseDouble(courant.getAttributeValue("y1"));
             int _x2 = (int)Double.parseDouble(courant.getAttributeValue("x2"));
             int _y2 = (int)Double.parseDouble(courant.getAttributeValue("y2"));
 
+            // On calcule les deux points afin d'obtenir la ligne.
          	arrayTemp.add(new Vector2(_x1 ,hauteur-_y1));
          	arrayTemp.add(new Vector2(_x2,hauteur-_y2));
 
+         	// Envois de la trajectoire au Robot
          	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
          }
+         // La balise polyline indique le dessin d'une ligne brisée
          else if(courant.getName().equals("polyline"))
          {
         	System.out.println("found polyline");
 
           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
-
+          	// On récupère les information contenu dans le fichier
           	String _points = courant.getAttributeValue("points");
           	String[] tabLocal = _points.split(" ");
           	String[] tabLocalTemp;
 
+            // On calcule les différent points afin d'obtenir la ligne brisée.
           	int cpt=0;
 
           	while(cpt<tabLocal.length)
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
-          		arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0]) ,hauteur-((int)Double.parseDouble(tabLocalTemp[1]))));
+          		arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0]) ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])));
           		cpt=cpt+1;
           	}
 
-
+          	// Envois de la trajectoire au Robot
           	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
 
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
          }
+         // La balise polygon indique le dessin d'un polygone
          else if(courant.getName().equals("polygon"))
          {
           	System.out.println("found polygon");
 
           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
-
+		    
+		     // On récupère les information contenu dans le fichier
           	String _points = courant.getAttributeValue("points");
           	String[] tabLocal = _points.split(" ");
           	String[] tabLocalTemp;
 
           	int cpt=0;
-
+          	
+          	// Calcule des points de la figure
           	while(cpt<tabLocal.length)
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
-          		arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0]) ,hauteur-((int)Double.parseDouble(tabLocalTemp[1]))));
+          		arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0]) ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])));
           		cpt=cpt+1;
           	}
-
+          	
+          	// Ajout du dernier point afibn de fermerr la figure
           	tabLocalTemp=tabLocal[0].split(",");
-      		arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0]) ,hauteur-((int)Double.parseDouble(tabLocalTemp[1]))));
+      		arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0]) ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])));
 
-
+      		// Envois de la trajectoire au Robot
           	trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
 
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
@@ -310,77 +339,63 @@ public class SvgHandler
           	int yRef=0;
 
           	int cpt=0;
-          	boolean zFound;
 
           	while(cpt<tabLocal.length)
           	{
           		tabLocalTemp=tabLocal[cpt].split(",");
-          		zFound = false;
-
-          		if(
-          			/*tabLocalTemp[0].charAt(tabLocalTemp[0].length()-1)=='Z' ||
-          			tabLocalTemp[0].charAt(tabLocalTemp[0].length()-1)=='z' ||*/
-          			tabLocalTemp[1].charAt(tabLocalTemp[1].length()-1)=='Z' ||
-          			tabLocalTemp[1].charAt(tabLocalTemp[1].length()-1)=='z' )
-          		{
-          			zFound = true;
-          			System.out.println(tabLocalTemp[1]);
-          			tabLocalTemp[1] = tabLocalTemp[1].substring(0, tabLocalTemp[1].length()-1);
-          			System.out.println(tabLocalTemp[1]);
-          		}
-
-
           		if(tabLocalTemp[0].charAt(0)=='M')
           		{
           			System.out.println("M found");
-          			xM=xRef=(int)Double.parseDouble(tabLocalTemp[0].substring(1))+xM;
-          			yM=yRef=(int)Double.parseDouble(tabLocalTemp[1])+yM;
-         			arrayTemp.add(new Vector2(xRef ,yRef));
-
+          			xM=xRef=(int)Double.parseDouble(tabLocalTemp[0].substring(1)+xM);
+          			yM=yRef=(int)Double.parseDouble(tabLocalTemp[1]+yM);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='m')
           		{
-          			xM=xRef=(int)Double.parseDouble(xRef+tabLocalTemp[0].substring(1))+xRef;
-          			yM=yRef=(int)Double.parseDouble(yRef+tabLocalTemp[1])+yRef;
-          			arrayTemp.add(new Vector2(xRef ,yRef));
+          			xM=xRef=(int)Double.parseDouble(xRef+tabLocalTemp[0].substring(1)+xRef);
+          			yM=yRef=(int)Double.parseDouble(yRef+tabLocalTemp[1]+yRef);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='L')
           		{
-          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
-          			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0].substring(1)) + xM ,hauteur-((int)Double.parseDouble(tabLocalTemp[1])+yM)));
-          			xRef=(int)Double.parseDouble(tabLocalTemp[0].substring(1))+xRef;
-          			yRef=(int)Double.parseDouble(tabLocalTemp[1])+yRef;
+          			arrayTemp.add(new Vector2(xRef ,hauteur+yRef));
+          			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0].substring(1)) + xM ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])+yM));
+          			xRef=(int)Double.parseDouble(xRef+tabLocalTemp[0].substring(1));
+          			yRef=(int)Double.parseDouble(yRef+tabLocalTemp[1]);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='l')
           		{
-          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
-          			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0].substring(1))+xRef ,hauteur-((int)Double.parseDouble(tabLocalTemp[1])+yRef)));
-          			xRef=(int)Double.parseDouble(tabLocalTemp[0].substring(1))+xRef;
-          			yRef=(int)Double.parseDouble(tabLocalTemp[1])+yRef;
+          			arrayTemp.add(new Vector2(xRef ,hauteur+yRef));
+          			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0].substring(1))+xRef ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])+yRef));
+          			xRef=(int)Double.parseDouble(xRef+tabLocalTemp[0].substring(1));
+          			yRef=(int)Double.parseDouble(yRef+tabLocalTemp[1]);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='H')
           		{
           			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
           			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0].substring(1))+xM ,hauteur-yRef));
-          			xRef=(int)Double.parseDouble(tabLocalTemp[0].substring(1))+xM;
+          			xRef=(int)Double.parseDouble(tabLocalTemp[0].substring(1)+xM);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='h')
           		{
           			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
           			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0].substring(1))+xRef ,hauteur-yRef));
-          			xRef=(int)Double.parseDouble(tabLocalTemp[0].substring(1))+xRef;
+          			xRef=(int)Double.parseDouble(tabLocalTemp[0].substring(1)+xRef);
           		}
           		else if(tabLocalTemp[0].charAt(0)=='V')
           		{
           			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
-          			arrayTemp.add(new Vector2(xRef ,hauteur-((int)Double.parseDouble(tabLocalTemp[1])+yM)));
-          			yRef=(int)Double.parseDouble(tabLocalTemp[1])+yRef;
+          			arrayTemp.add(new Vector2(xRef ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])+yM));
+          			yRef=(int)Double.parseDouble(tabLocalTemp[1])+yM;
           		}
           		else if(tabLocalTemp[0].charAt(0)=='v')
           		{
           			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
-          			arrayTemp.add(new Vector2(xRef ,hauteur-((int)Double.parseDouble(tabLocalTemp[1])+yRef)));
+          			arrayTemp.add(new Vector2(xRef ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])+yRef));
           			yRef=(int)Double.parseDouble(tabLocalTemp[1])+yRef;
+          		}
+          		else if(tabLocalTemp[0].charAt(0)=='Z' || tabLocalTemp[0].charAt(0)=='z')
+          		{
+          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
+          			arrayTemp.add(new Vector2(yM ,hauteur-xM));
           		}
           		else if(tabLocalTemp[0].charAt(0)=='q')
           		{
@@ -390,11 +405,11 @@ public class SvgHandler
           			int axTemp = xRef;
           			int ayTemp = yRef;
           			int bxTemp = (int)Double.parseDouble(tabLocalTemp[0].substring(1))+xRef;
-          			int byTemp = (int)Double.parseDouble(tabLocalTemp[0])+yRef;
+          			int byTemp = (int)Double.parseDouble(tabLocalTemp[0]+yRef);
           			cpt++;
           			tabLocalTemp=tabLocal[cpt].split(",");
           			int cxTemp = (int)Double.parseDouble(tabLocalTemp[0].substring(1))+xRef;
-          			int cyTemp = (int)Double.parseDouble(tabLocalTemp[0])+yRef;
+          			int cyTemp = (int)Double.parseDouble(tabLocalTemp[0]+yRef);
 
           			float uax = (axTemp-bxTemp)/50;
           			float uay = (ayTemp-byTemp)/50;
@@ -422,12 +437,12 @@ public class SvgHandler
           				fragPx=(p1x-p2x)/50;
           				fragPy=(p1y-p2y)/50;
 
-              			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,hauteur-((int)(p1y+fragPy*cpt)))));
+              			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,hauteur-(int)(p1y+fragPy*cpt))));
 
           				cptTemp++;
           			}
 
-          			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0].substring(1))+xRef ,hauteur-((int)Double.parseDouble(tabLocalTemp[1])+yRef) ) );
+          			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0].substring(1)) ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])));
 
           			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
           			arrayTemp = new ArrayList<Vector2>();
@@ -476,12 +491,12 @@ public class SvgHandler
           				fragPx=(p1x-p2x)/50;
           				fragPy=(p1y-p2y)/50;
 
-              			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,hauteur-((int)(p1y+fragPy*cpt)))));
+              			arrayTemp.add((new Vector2((int)(p1x+fragPx*cpt) ,hauteur-(int)(p1y+fragPy*cpt))));
 
           				cptTemp++;
           			}
 
-          			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0].substring(1))+xM ,hauteur-((int)Double.parseDouble(tabLocalTemp[1])+yM) ) );
+          			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0].substring(1)) ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])));
 
           			trajectories.add(new Trajectoire(Type.LINE, arrayTemp));
           			arrayTemp = new ArrayList<Vector2>();
@@ -492,24 +507,8 @@ public class SvgHandler
           		else
           		{
           			System.out.println("point found");
-          			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0])+xRef ,hauteur-((int)Double.parseDouble(tabLocalTemp[1])+yRef)));
-          			xRef=(int)Double.parseDouble(tabLocalTemp[0])+xRef;
-          			yRef=(int)Double.parseDouble(tabLocalTemp[1])+yRef;
+          			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0])+xRef ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])+yRef));
           		}
-
-
-          		if(zFound == true){
-
-
-          			arrayTemp.add(new Vector2(xRef ,hauteur-yRef));
-          			arrayTemp.add(new Vector2(yM ,hauteur-xM));
-          			xRef=(int)Double.parseDouble(tabLocalTemp[0].substring(1))+xRef;
-          			yRef=(int)Double.parseDouble(tabLocalTemp[1])+yRef;
-
-
-          		}
-
-
           		cpt=cpt+1;
           	}
 
