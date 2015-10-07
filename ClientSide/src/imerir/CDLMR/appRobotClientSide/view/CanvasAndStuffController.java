@@ -19,6 +19,15 @@ import imerir.CDLMR.trajectoire.Trajectoire;
 import imerir.CDLMR.trajectoire.Trajectoire.Type;
 import imerir.CDLMR.trajectoire.Vector2;
 
+/**
+ * CanvasAndStuffController est la classe gérant la vue CanvasAndStuff, elle ne fait pas partie du package controller mais des vues,
+ *
+ * les balises @ FXML sont là pour rendre disponible la variable ou la fonction au xml fxml, pour pouvoir appeler les fonctions lors des évènements de la vue
+ *
+ * @author Mickael
+ *
+ */
+
 public class CanvasAndStuffController implements StateListener{
 
 	//int nbPointCurve = 0;
@@ -61,6 +70,11 @@ public class CanvasAndStuffController implements StateListener{
 
 	private DrawingMode drawingMode;
 
+
+	/**
+	 *
+	 * objet trajectoire en train d'être construit par les évènements du canvas
+	 */
 	private Trajectoire trajInConstruction;
 
 	double oldx;
@@ -74,6 +88,11 @@ public class CanvasAndStuffController implements StateListener{
 
     }
 
+
+    /**
+     *
+     * Fonction appelée lorsque l'état du robot change, on grise ou dégrise les boutons de dessin et d'impression
+     */
 	@Override
 	public void etatChanged(StateChangedEvent e) {
 		// TODO Auto-generated method stub
@@ -94,7 +113,9 @@ public class CanvasAndStuffController implements StateListener{
 		}
 	}
 
-
+	/**
+	 * lors d'un clic sur le bouton Line, on set le mode sur LINE
+	 */
 	@FXML
     private void handleLineButton(){
 
@@ -102,6 +123,9 @@ public class CanvasAndStuffController implements StateListener{
 		setDrawingMode(DrawingMode.LINE);
 	}
 
+	/**
+	 * lors d'un clic sur le bouton circle, on set le mode sur CIRCLE
+	 */
 	@FXML
     private void handleCircleButton(){
 
@@ -109,6 +133,9 @@ public class CanvasAndStuffController implements StateListener{
 		setDrawingMode(DrawingMode.CIRCLE);
 	}
 
+	/**
+	 * lors d'un clic sur le bouton Rect, on set le mode sur RECT
+	 */
 	@FXML
     private void handleRectButton(){
 
@@ -116,6 +143,9 @@ public class CanvasAndStuffController implements StateListener{
 		setDrawingMode(DrawingMode.RECT);
 	}
 
+	/**
+	 * lors d'un clic sur le bouton Polyline, on set le mode sur POLYLINE
+	 */
 	@FXML
     private void handlePolyLineButton(){
 
@@ -123,6 +153,9 @@ public class CanvasAndStuffController implements StateListener{
 		setDrawingMode(DrawingMode.POLYLINE);
 	}
 
+	/**
+	 * lors d'un clic sur le bouton Poylygon, on set le mode sur POLYGON
+	 */
 	@FXML
     private void handlePolygonButton(){
 
@@ -130,6 +163,9 @@ public class CanvasAndStuffController implements StateListener{
 		setDrawingMode(DrawingMode.POLYGON);
 	}
 
+	/**
+	 * lors d'un clic sur le bouton Ellipse, on set le mode sur ELLIPSE
+	 */
 	@FXML
 
 
@@ -140,6 +176,9 @@ public class CanvasAndStuffController implements StateListener{
 
 	}
 
+	/**
+	 * lors d'un clic sur le bouton Bezier, on set le mode sur BEZIER
+	 */
 	@FXML
     private void handleBezierButton(){
 
@@ -147,6 +186,9 @@ public class CanvasAndStuffController implements StateListener{
 		setDrawingMode(DrawingMode.BEZIER);
 	}
 
+	/**
+	 * lors d'un clic sur le bouton Curve, on set le mode sur CURVE
+	 */
 	@FXML
     private void handleCurveButton(){
 
@@ -154,6 +196,10 @@ public class CanvasAndStuffController implements StateListener{
 		setDrawingMode(DrawingMode.CURVE);
 	}
 
+	/**
+	 *
+	 * Lors d'un clear, clear le canvas et clear les trajectoires crées dans le modèle
+	 */
 	@FXML
     private void handleClearButton(){
 
@@ -173,7 +219,7 @@ public class CanvasAndStuffController implements StateListener{
 	}
 
 	 @FXML
-	 private void handleChooseFileButton() {
+	private void handleChooseFileButton() {
 	        System.out.println("button activated");
 
 	        FileChooser fileChooser = new FileChooser();
