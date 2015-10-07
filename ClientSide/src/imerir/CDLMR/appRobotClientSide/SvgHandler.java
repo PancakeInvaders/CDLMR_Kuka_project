@@ -316,6 +316,7 @@ public class SvgHandler
           		tabLocalTemp=tabLocal[cpt].split(",");
           		if(tabLocalTemp[0].charAt(0)=='M')
           		{
+          			System.out.println("M found");
           			xM=xRef=(int)Double.parseDouble(tabLocalTemp[0].substring(1)+xM);
           			yM=yRef=(int)Double.parseDouble(tabLocalTemp[1]+yM);
           		}
@@ -476,6 +477,7 @@ public class SvgHandler
           		}
           		else
           		{
+          			System.out.println("point found");
           			arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0])+xRef ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])+yRef));
           		}
           		cpt=cpt+1;
