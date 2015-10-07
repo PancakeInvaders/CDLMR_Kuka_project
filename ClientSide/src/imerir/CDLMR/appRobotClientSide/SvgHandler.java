@@ -315,7 +315,7 @@ public class SvgHandler
           		cpt=cpt+1;
           	}
           	
-          	// Ajout du dernier point afibn de fermerr la figure
+          	// Ajout du dernier point afin de fermer la figure
           	tabLocalTemp=tabLocal[0].split(",");
       		arrayTemp.add(new Vector2((int)Double.parseDouble(tabLocalTemp[0]) ,hauteur-(int)Double.parseDouble(tabLocalTemp[1])));
 
@@ -324,12 +324,14 @@ public class SvgHandler
 
         	//ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
          }
+         // Traitement de la balise path
          else if(courant.getName().equals("path"))
          {
           	System.out.println("found path");
 
           	ArrayList <Vector2> arrayTemp = new ArrayList<Vector2>();
-
+          	
+          	// Initialisation
           	String _points = courant.getAttributeValue("d");
           	String[] tabLocal = _points.split(" ");
           	String[] tabLocalTemp;
